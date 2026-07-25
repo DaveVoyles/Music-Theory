@@ -251,6 +251,118 @@
   gap: 0.3rem;
 }
 
+.analyzer-body {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.analyzer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.analyzer-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.analyzer-input {
+  width: 100%;
+  max-width: 28rem;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  font: inherit;
+}
+
+.analyzer-columns {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) 1fr;
+  gap: 0.75rem;
+  min-height: 140px;
+}
+
+.analyzer-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.analyzer-song-btn,
+.analyzer-section-btn {
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.analyzer-song-btn:hover,
+.analyzer-section-btn:hover {
+  border-color: var(--accent);
+}
+
+.analyzer-song-btn.is-active {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.analyzer-song-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.analyzer-song-meta,
+.analyzer-section-key,
+.analyzer-section-romans {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.analyzer-timeline-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.analyzer-sections {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.analyzer-section-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.analyzer-section-chords {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
@@ -260,5 +372,9 @@
   .panel-cof {
     border-right: none;
     border-bottom: 1px solid var(--border);
+  }
+
+  .analyzer-columns {
+    grid-template-columns: 1fr;
   }
 }
