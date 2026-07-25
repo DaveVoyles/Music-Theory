@@ -95,6 +95,13 @@ describe('theory store setters', () => {
     })
   })
 
+  it('selectKey clears focusDegree so filters never orphan under a new key', () => {
+    store.getState().setFocusDegree(5)
+    store.getState().selectKey({ key: 7, keySpelling: 'G', mode: 'major' })
+    expect(store.getState().focusDegree).toBeNull()
+    expect(store.getState().key).toBe(7)
+  })
+
   it('resetTheoryUi restores cold-start defaults', () => {
     store.getState().selectKey({ key: 5, keySpelling: 'F', mode: 'major' })
     store.getState().setFocusDegree(4)

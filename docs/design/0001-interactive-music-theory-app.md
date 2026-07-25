@@ -51,16 +51,16 @@ UI Shell (dark split layout)
 
 | ID | Deliverable | Size | Acceptance Criteria | Dependencies | Status |
 |----|-------------|------|---------------------|--------------|--------|
-| D1 | App scaffold + Pages-ready Vite React TS shell (dark layout chrome, empty panes) | S | App builds; static export works with configurable base path; split layout chrome renders desktop-first | — | Pending |
-| D2 | Pure theory engine (keys, three minor forms, key-aware spellings, diatonic sets, degree → chord tones) | M | Pure functions cover C major and at least one sharp + one flat key; natural/harmonic/melodic differ on 6/7 as expected; no UI coupling | D1 | Pending |
-| D3 | Zustand theory store + localStorage rehydrate | S | Store holds key, mode, minorForm, focusDegree; cold start C major; reload restores last theory UI state | D2 | Pending |
-| D4 | Circle of Fifths dual-ring (Pixi): click selects key/mode; relative highlight | M | Click outer major / inner minor updates store; relative pair highlighted; smooth selection feedback | D3 | Pending |
-| D5 | Fretboard (Pixi): EADGBE 0–12, diatonic labels, root emphasis, E/A/D power-chord emphasis | M | Changing store key updates frets instantly; non-diatonic dark; Low E/A/D visually stronger; 12 frets + open | D3 | Pending |
-| D6 | Tone.js: note pitch + key tonic triad | S | Fret note click plays pitch; CoF key click plays triad for selected mode/minor form; respects user-gesture autoplay rules | D4, D5 | Pending |
-| D7 | Roman-numeral strip + minor-form segmented control | S | Selecting a degree filters chord-tone focus on fretboard; re-select/All clears; minor form control visible only for minor keys and updates scale/triad | D4, D5 | Pending |
-| D8 | SongAnalyzerProvider + MockProvider fixtures + collapsible panel | M | Search/select 2–3 fixture songs; DTO maps to section timeline; selecting a section updates store key; HttpProvider stub configurable by base URL without shipping secrets | D3 | Pending |
-| D9 | GitHub Actions deploy to `gh-pages` | S | Push/main workflow builds and deploys; site loads on GitHub Pages URL | D1 | Pending |
-| D10 | End-to-end sync polish + empty-state copy | S | Circle, fretboard, roman strip, audio, and mock analyzer stay consistent under rapid key changes; no orphan UI state | D6–D8 | Pending |
+| D1 | App scaffold + Pages-ready Vite React TS shell (dark layout chrome, empty panes) | S | App builds; static export works with configurable base path; split layout chrome renders desktop-first | — | Done (#1) |
+| D2 | Pure theory engine (keys, three minor forms, key-aware spellings, diatonic sets, degree → chord tones) | M | Pure functions cover C major and at least one sharp + one flat key; natural/harmonic/melodic differ on 6/7 as expected; no UI coupling | D1 | Done (#2) |
+| D3 | Zustand theory store + localStorage rehydrate | S | Store holds key, mode, minorForm, focusDegree; cold start C major; reload restores last theory UI state | D2 | Done (#4) |
+| D4 | Circle of Fifths dual-ring (Pixi): click selects key/mode; relative highlight | M | Click outer major / inner minor updates store; relative pair highlighted; smooth selection feedback | D3 | Done (#5) |
+| D5 | Fretboard (Pixi): EADGBE 0–12, diatonic labels, root emphasis, E/A/D power-chord emphasis | M | Changing store key updates frets instantly; non-diatonic dark; Low E/A/D visually stronger; 12 frets + open | D3 | Done (#6) |
+| D6 | Tone.js: note pitch + key tonic triad | S | Fret note click plays pitch; CoF key click plays triad for selected mode/minor form; respects user-gesture autoplay rules | D4, D5 | Done (#8) |
+| D7 | Roman-numeral strip + minor-form segmented control | S | Selecting a degree filters chord-tone focus on fretboard; re-select/All clears; minor form control visible only for minor keys and updates scale/triad | D4, D5 | Done (#9) |
+| D8 | SongAnalyzerProvider + MockProvider fixtures + collapsible panel | M | Search/select 2–3 fixture songs; DTO maps to section timeline; selecting a section updates store key; HttpProvider stub configurable by base URL without shipping secrets | D3 | Done (#7) |
+| D9 | GitHub Actions deploy to `gh-pages` | S | Push/main workflow builds and deploys; site loads on GitHub Pages URL | D1 | Done (#3; enable Pages + public/Pro for public URL) |
+| D10 | End-to-end sync polish + empty-state copy | S | Circle, fretboard, roman strip, audio, and mock analyzer stay consistent under rapid key changes; no orphan UI state | D6–D8 | Done (#10) |
 
 **Build-ready:** all deliverables are S/M (no L+ remaining).
 

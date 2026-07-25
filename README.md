@@ -2,7 +2,7 @@
 
 Interactive music-theory workspace for advanced guitarists: Circle of Fifths, guitar fretboard mapping, aural feedback, and modular song analysis.
 
-**Status:** Plan 0001 in progress (scaffold + shell on main once D1 lands).
+**Status:** Plan 0001 v1 complete on `main` (visual + audio + mock analyzer). Live HTTP analysis is a follow-on.
 
 ## Docs
 
@@ -21,6 +21,8 @@ React + Vite + TypeScript · PixiJS v8 · Zustand · Tone.js · GitHub Pages (`g
 ```bash
 npm install
 npm run dev
+npm test
+npm run build
 ```
 
 ### Production build & base path
@@ -36,21 +38,22 @@ VITE_BASE_PATH=/ npm run build
 npm run preview
 ```
 
-Set `VITE_BASE_PATH` at CI deploy time if the site path changes.
-
-## Layout chrome (D1)
-
-Desktop-first dark shell:
+## Layout
 
 | Region | Role |
 |--------|------|
-| Left | Circle of Fifths (+ roman / minor-form slot) |
-| Right / bottom | Fretboard |
-| Bottom | Collapsible song analyzer |
+| Left | Dual-ring Circle of Fifths + roman strip + minor form |
+| Right | EADGBE fretboard (0–12), diatonic labels, power-string emphasis |
+| Bottom | Collapsible mock song analyzer |
 
-## Issues
+## Manual E2E checklist (D10)
 
-https://github.com/DaveVoyles/Music-Theory/issues?q=is%3Aissue+state%3Aopen+label%3Aplan%3A0001
+1. Cold load → header shows **C major** / all diatonic.
+2. Click outer CoF majors rapidly → fret labels + header update; hear tonic triad after first gesture.
+3. Click inner minor → minor-form control appears; switch harmonic → G# appears in A minor.
+4. Focus roman **V** → only V chord tones bright on the neck; **All** or re-tap clears.
+5. Open analyzer → pick a fixture → section click jumps CoF + neck + clears degree focus.
+6. Reload page → last key/mode/minor form restored from localStorage.
 
 ## GitHub Pages deploy
 
@@ -61,3 +64,6 @@ CI workflow [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-page
 3. Private repos need GitHub Pro (or a public repo) for GitHub Pages hosting.
 4. Override base path only if the site path changes: set `VITE_BASE_PATH` in the workflow Build step.
 
+## Issues
+
+https://github.com/DaveVoyles/Music-Theory/issues?q=is%3Aissue+label%3Aplan%3A0001

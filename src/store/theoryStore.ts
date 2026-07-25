@@ -120,13 +120,23 @@ const createInitializer =
       set({ focusDegree: current === degree ? null : degree })
     },
 
-    selectKey: ({ key, keySpelling, mode, minorForm }) =>
+    selectKey: ({ key, keySpelling, mode, minorForm }) => {
+      const prev = get()
+      const nextSpelling = resolveSpelling(key, keySpelling)
+      const nextMinor =
+        minorForm ?? (mode === 'minor' ? prev.minorForm : 'natural')
+      // Clear degree focus when key/mode jumps (CoF / analyzer) so chord-tone
+      // filter never outlives the key it was chosen under.
+      const keyChanged =
+        prev.key !== key || prev.mode !== mode || prev.keySpelling !== nextSpelling
       set({
         key,
-        keySpelling: resolveSpelling(key, keySpelling),
+        keySpelling: nextSpelling,
         mode,
-        minorForm: minorForm ?? (mode === 'minor' ? get().minorForm : 'natural'),
-      }),
+        minorForm: nextMinor,
+        focusDegree: keyChanged ? null : prev.focusDegree,
+      })
+    },
 
     resetTheoryUi: () => set({ ...DEFAULT_THEORY_UI }),
   })
