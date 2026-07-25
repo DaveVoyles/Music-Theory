@@ -1,4 +1,5 @@
 import { HelpTip } from './HelpTip'
+import { theoryAudio } from '../audio'
 import {
   degreeLessonInfo,
   degreeLessonOverview,
@@ -73,12 +74,21 @@ export function DegreeLesson() {
         <span className="degree-lesson-quality">{info.quality}</span>
       </div>
 
-      <div className="degree-lesson-tones" aria-label="Chord tones">
-        {info.chordTones.map((tone, i) => (
-          <span key={`${tone}-${i}`} className="degree-lesson-tone">
-            {tone}
-          </span>
-        ))}
+      <div className="degree-lesson-tones-row">
+        <div className="degree-lesson-tones" aria-label="Chord tones">
+          {info.chordTones.map((tone, i) => (
+            <span key={`${tone}-${i}`} className="degree-lesson-tone">
+              {tone}
+            </span>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="degree-lesson-hear"
+          onClick={() => void theoryAudio.playDegreeTriad(keyRef, focusDegree)}
+        >
+          Hear triad
+        </button>
       </div>
 
       <dl className="degree-lesson-facts">

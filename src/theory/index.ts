@@ -68,3 +68,17 @@ export {
   type DegreeLessonInfo,
   type HarmonicFunction,
 } from './degreeLesson'
+
+export {
+  QUIZ_MAJOR_KEYS,
+  QUIZ_MINOR_KEYS,
+  makeDegreeChordQuestion,
+  makeDegreeFunctionQuestion,
+  makeSignatureAccidentalsQuestion,
+  makeSignatureCountQuestion,
+  mulberry32,
+  nextQuizQuestion,
+  type QuizKind,
+  type QuizQuestion,
+  type Rng,
+} from './quiz'

@@ -7,6 +7,7 @@ import { Fretboard } from './components/Fretboard'
 import { DegreeLesson } from './components/DegreeLesson'
 import { KeyLesson } from './components/KeyLesson'
 import { MinorFormControl } from './components/MinorFormControl'
+import { QuizPanel } from './components/QuizPanel'
 import { RomanStrip } from './components/RomanStrip'
 import { useTheoryStore } from './store'
 
@@ -16,6 +17,7 @@ import { useTheoryStore } from './store'
  */
 function App() {
   const [analyzerOpen, setAnalyzerOpen] = useState(true)
+  const [quizOpen, setQuizOpen] = useState(true)
   const keySpelling = useTheoryStore((s) => s.keySpelling)
   const mode = useTheoryStore((s) => s.mode)
   const minorForm = useTheoryStore((s) => s.minorForm)
@@ -99,6 +101,34 @@ function App() {
           <div className="panel-body fretboard-pane">
             <Fretboard />
           </div>
+          <section
+            className={`panel-quiz ${quizOpen ? 'is-open' : 'is-collapsed'}`}
+            aria-label="Theory quiz"
+          >
+            <div className="panel-header quiz-panel-header">
+              <FeatureHeading
+                feature="quiz"
+                meta="Key signatures · degree functions · active recall"
+              />
+              <button
+                type="button"
+                className="collapse-btn"
+                aria-expanded={quizOpen}
+                onClick={() => setQuizOpen((o) => !o)}
+              >
+                {quizOpen ? 'Collapse' : 'Expand'}
+              </button>
+            </div>
+            {quizOpen ? (
+              <div className="panel-body quiz-body">
+                <QuizPanel />
+              </div>
+            ) : (
+              <p className="quiz-collapsed-copy">
+                Quiz collapsed — expand to drill sharps/flats and degree functions.
+              </p>
+            )}
+          </section>
         </main>
       </div>
 

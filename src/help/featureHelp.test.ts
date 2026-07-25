@@ -10,6 +10,7 @@ describe('FEATURE_HELP catalog', () => {
       'circleOfFifths',
       'romanStrip',
       'degreeLesson',
+      'quiz',
       'minorForm',
       'fretboard',
       'analyzer',

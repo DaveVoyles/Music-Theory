@@ -1,9 +1,11 @@
+import { theoryAudio } from '../audio'
 import { ALL_DEGREES, romanNumeral, type Degree } from '../theory'
 import { useTheoryStore } from '../store'
 
 /**
- * Compact I–vii° strip under the CoF. Selecting a degree focuses chord tones;
- * re-selecting the same degree or All clears the filter.
+ * Compact I–vii° strip under the CoF. Selecting a degree focuses chord tones,
+ * teaches via DegreeLesson, and plays the degree triad (ear training).
+ * Re-selecting the same degree or All clears the filter.
  */
 export function RomanStrip() {
   const mode = useTheoryStore((s) => s.mode)
@@ -21,6 +23,14 @@ export function RomanStrip() {
     minorForm,
   }
 
+  function onDegreeClick(deg: Degree) {
+    const clearing = focusDegree === deg
+    toggleFocusDegree(deg)
+    if (!clearing) {
+      void theoryAudio.playDegreeTriad(keyRef, deg)
+    }
+  }
+
   return (
     <div className="roman-strip" role="toolbar" aria-label="Degree focus">
       <button
@@ -36,7 +46,7 @@ export function RomanStrip() {
           type="button"
           className={`roman-btn ${focusDegree === deg ? 'is-active' : ''}`}
           aria-pressed={focusDegree === deg}
-          onClick={() => toggleFocusDegree(deg)}
+          onClick={() => onDegreeClick(deg)}
         >
           {romanNumeral(keyRef, deg)}
         </button>

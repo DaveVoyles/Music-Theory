@@ -42,14 +42,20 @@ export const FEATURE_HELP = {
   romanStrip: {
     title: 'Roman-numeral degrees',
     what: 'Scale degrees I–vii° name chords built on each step of the current key (e.g. V = dominant).',
-    how: 'Selecting a degree filters the fretboard to that chord’s tones and opens the Degree function lesson (role, chord tones, why, try this). “All” or tapping the same degree again clears the filter.',
-    tryThis: 'In C major, tap V — neck shows G–B–D and the lesson explains dominant function.',
+    how: 'Selecting a degree filters the fretboard to that chord’s tones, opens the Degree function lesson, and plays the degree triad. “All” or tapping the same degree again clears the filter (no sound on clear).',
+    tryThis: 'In C major, tap V — hear G–B–D, neck filters, lesson explains dominant function.',
   },
   degreeLesson: {
     title: 'Degree function lesson',
     what: 'What each scale degree does in the key: tonic / subdominant / dominant roles, the triad notes, and why it pulls the way it does.',
-    how: 'Follows the roman strip. With no degree selected, you get a short map of function families. Selecting I–vii° fills in name, quality, chord tones, a Why paragraph, and a Try this progression tip. Minor form changes V/vii quality and copy.',
-    tryThis: 'In C major: tap I (home), then V (tension), then I again. Read Why each time. Then try ii → V → I.',
+    how: 'Follows the roman strip. Selecting a degree also plays its triad (ear training). Use “Hear triad” to replay. Minor form changes V/vii quality, copy, and sound.',
+    tryThis: 'In C major: tap I (home), then V (tension), then I again — listen and read Why. Then try ii → V → I.',
+  },
+  quiz: {
+    title: 'Theory quiz',
+    what: 'Active-recall drills on key signatures and degree functions — the same facts the lesson panels teach.',
+    how: 'Answer multiple choice (count of sharps/flats, which accidentals, degree names, chord tones). After each answer you get an explanation. “Show on workspace” jumps the Circle, neck, and lessons to that key/degree.',
+    tryThis: 'Miss one on purpose, read the explain text, hit Show on workspace, then Next question.',
   },
   minorForm: {
     title: 'Minor form',

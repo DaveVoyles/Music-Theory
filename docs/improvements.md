@@ -26,10 +26,11 @@ Ideas ranked for impact vs. effort. Not committed work — pick via a new plan/i
 ## Teaching / pedagogy
 
 13. **Interval lesson** — when two frets or two CoF keys are in focus, explain the interval name + semitones.  
-14. ~~**Degree function blurbs**~~ — shipped: `degreeLessonInfo` + `DegreeLesson` under the roman strip.  
-15. **Quiz mode** — “How many sharps in E major?” / “What degree is the dominant?” flashcards using lesson engines.  
-16. **Staff notation sketch** — optional SVG key signature (sharps/flats on a staff) next to the pill list.  
-17. **Play degree triad on select** — audio for focused roman (ties teaching to ear).
+14. ~~**Degree function blurbs**~~ — shipped (`DegreeLesson`).  
+15. ~~**Quiz mode**~~ — shipped (`quiz.ts` + `QuizPanel`).  
+16. **Staff notation sketch** — optional SVG key signature next to the pill list.  
+17. ~~**Play degree triad on select**~~ — shipped (`playDegreeTriad` + roman strip / Hear triad).  
+18. **Ear quiz** — “which degree did you hear?” using `playDegreeTriad`.
 
 ## Engineering hygiene
 
