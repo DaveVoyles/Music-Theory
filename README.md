@@ -51,3 +51,13 @@ Desktop-first dark shell:
 ## Issues
 
 https://github.com/DaveVoyles/Music-Theory/issues?q=is%3Aissue+state%3Aopen+label%3Aplan%3A0001
+
+## GitHub Pages deploy
+
+CI workflow [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) builds on every push to `main` (and `workflow_dispatch`) and publishes `dist/` to the `gh-pages` branch with Vite base `/Music-Theory/`.
+
+1. **Enable Pages** in repo Settings → Pages → Source: **Deploy from a branch** → branch `gh-pages` / `/ (root)`.
+2. Site URL (after first successful run): `https://davevoyles.github.io/Music-Theory/`
+3. Private repos need GitHub Pro (or a public repo) for GitHub Pages hosting.
+4. Override base path only if the site path changes: set `VITE_BASE_PATH` in the workflow Build step.
+
