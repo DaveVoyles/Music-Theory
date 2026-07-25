@@ -30,6 +30,38 @@
   color: var(--text-muted);
 }
 
+.app-key-badge {
+  margin: 0 0 0 auto;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: capitalize;
+}
+
+.cof-pane {
+  display: grid;
+  place-items: center;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.cof-root {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.cof-root canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
 .workspace {
   flex: 1;
   display: grid;
