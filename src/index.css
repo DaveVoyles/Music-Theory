@@ -1,18 +1,37 @@
 :root {
   color-scheme: dark;
 
+  /* Surfaces */
   --bg: #0d0f12;
   --surface: #14181e;
   --surface-raised: #1a1f27;
-  --border: #252b35;
-  --border-strong: #343c49;
-  --text: #e8ecf1;
-  --text-muted: #8b95a5;
+  --border: #2a313c;
+  --border-strong: #3d4656;
+
+  /* Text — higher contrast than before (muted was too dim) */
+  --text: #f0f3f7;
+  --text-muted: #a8b2c1;
+
+  /* Accent (mint). Always pair filled accent with --on-accent (dark). */
   --accent: #5eead4;
   --accent-strong: #2dd4bf;
+  --on-accent: #042f2e;
+
+  /* Semantic feedback — light fill + dark text (readable) */
+  --success-bg: #a7f3d0;
+  --success-text: #064e3b;
+  --success-border: #34d399;
+  --danger-bg: #fecaca;
+  --danger-text: #7f1d1d;
+  --danger-border: #f87171;
   --danger: #f87171;
   --root-emphasis: #fbbf24;
 
+  /*
+   * Slightly larger UI: browsers default 16px → ~17.5px.
+   * Rem-based components scale together.
+   */
+  font-size: 110%;
   font-family:
     'Inter',
     system-ui,
@@ -26,7 +45,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.4;
+  line-height: 1.45;
   font-weight: 400;
   color: var(--text);
   background-color: var(--bg);

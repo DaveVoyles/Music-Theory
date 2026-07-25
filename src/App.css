@@ -25,7 +25,7 @@
 
 .app-title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 650;
   letter-spacing: 0.02em;
   color: var(--text);
@@ -60,29 +60,29 @@
 
 .app-subtitle {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .app-key-badge {
   margin: 0;
-  padding: 0.35rem 0.75rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
   border: 1px solid var(--border-strong);
   background: var(--bg);
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--accent);
   text-transform: capitalize;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.1rem;
-  line-height: 1.2;
+  gap: 0.15rem;
+  line-height: 1.25;
 }
 
 .app-key-badge-sub {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-muted);
   text-transform: none;
@@ -90,7 +90,7 @@
 
 .control-hint {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
@@ -102,7 +102,7 @@
 .analyzer-collapsed-copy {
   margin: 0;
   padding: 0.5rem 1rem 0.75rem;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
 }
 
@@ -171,7 +171,7 @@
 .panel-header h2,
 .feature-heading-title {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -197,7 +197,7 @@
 }
 
 .panel-meta {
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
@@ -210,14 +210,14 @@
 
 .help-tip-trigger {
   appearance: none;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.35rem;
+  height: 1.35rem;
   padding: 0;
   border-radius: 999px;
   border: 1px solid var(--border-strong);
   background: var(--bg);
   color: var(--accent);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
   line-height: 1;
   cursor: help;
@@ -228,9 +228,9 @@
 }
 
 .help-tip--compact .help-tip-trigger {
-  width: 1rem;
-  height: 1rem;
-  font-size: 0.65rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 0.75rem;
 }
 
 .help-tip-trigger:hover,
@@ -249,8 +249,8 @@
   z-index: 40;
   top: calc(100% + 0.4rem);
   left: 0;
-  width: min(22rem, 70vw);
-  padding: 0.75rem 0.85rem;
+  width: min(24rem, 78vw);
+  padding: 0.85rem 1rem;
   border-radius: 10px;
   border: 1px solid var(--border-strong);
   background: var(--surface-raised);
@@ -259,8 +259,8 @@
   text-transform: none;
   letter-spacing: normal;
   font-weight: 400;
-  font-size: 0.8rem;
-  line-height: 1.45;
+  font-size: 0.9rem;
+  line-height: 1.5;
   pointer-events: none;
 }
 
@@ -278,7 +278,7 @@
 
 .help-tip-title {
   margin: 0 0 0.5rem;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--accent);
   text-transform: none;
@@ -287,7 +287,7 @@
 
 .help-tip-block {
   margin: 0 0 0.45rem;
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 .help-tip-block:last-child {
@@ -297,24 +297,24 @@
 .help-tip-kicker {
   display: block;
   margin-bottom: 0.12rem;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--text);
+  color: var(--accent);
 }
 
 .control-row {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .control-row-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.7rem;
+  gap: 0.35rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -324,9 +324,9 @@
 .analyzer-col-heading {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   margin: 0 0 0.4rem;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -370,8 +370,8 @@
   background: var(--bg);
   color: var(--text);
   border-radius: 6px;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.84rem;
   cursor: pointer;
 }
 
@@ -404,14 +404,14 @@
   margin: 0;
   max-width: 28ch;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.45;
   color: var(--text-muted);
 }
 
 .empty-copy.muted {
-  font-size: 0.8rem;
-  opacity: 0.85;
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 /* —— Key signature lesson (teaching panel under CoF) —— */
@@ -436,7 +436,7 @@
 
 .key-lesson-title {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -448,10 +448,10 @@
 
 .key-lesson-summary {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .key-lesson-pills {
@@ -463,9 +463,9 @@
 .key-lesson-pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem 0.5rem;
+  padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   font-weight: 650;
   letter-spacing: 0.02em;
   border: 1px solid var(--border-strong);
@@ -474,19 +474,19 @@
 }
 
 .key-lesson-pills--sharp .key-lesson-pill {
-  border-color: rgba(120, 190, 255, 0.45);
-  color: #9ecfff;
-  background: rgba(80, 140, 220, 0.12);
+  border-color: rgba(120, 190, 255, 0.55);
+  color: #dbeafe;
+  background: rgba(30, 64, 120, 0.55);
 }
 
 .key-lesson-pills--flat .key-lesson-pill {
-  border-color: rgba(200, 160, 255, 0.45);
-  color: #d4b8ff;
-  background: rgba(140, 100, 220, 0.12);
+  border-color: rgba(200, 160, 255, 0.55);
+  color: #f3e8ff;
+  background: rgba(80, 50, 120, 0.55);
 }
 
 .key-lesson-pill--empty {
-  color: var(--text-muted);
+  color: var(--text);
   font-weight: 500;
 }
 
@@ -498,21 +498,21 @@
 }
 
 .key-lesson-note {
-  min-width: 1.6rem;
+  min-width: 1.85rem;
   text-align: center;
-  padding: 0.15rem 0.3rem;
+  padding: 0.22rem 0.4rem;
   border-radius: 4px;
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .key-lesson-note.is-accidental {
-  color: var(--accent);
+  color: var(--on-accent);
   font-weight: 700;
-  background: rgba(100, 180, 255, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(100, 180, 255, 0.25);
+  background: var(--accent);
+  box-shadow: none;
 }
 
 .key-lesson-facts {
@@ -531,7 +531,7 @@
 
 .key-lesson-facts dt {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 650;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -541,14 +541,14 @@
 
 .key-lesson-facts dd {
   margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--text);
 }
 
 .key-lesson-pair-hint {
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.84rem;
 }
 
 /* —— Degree function lesson (under roman strip) —— */
@@ -596,7 +596,7 @@
 
 .degree-lesson-title {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -608,10 +608,10 @@
 
 .degree-lesson-summary {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .degree-lesson-meta {
@@ -625,23 +625,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2rem;
-  padding: 0.15rem 0.45rem;
+  min-width: 2.25rem;
+  padding: 0.25rem 0.55rem;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
   background: var(--accent);
-  color: var(--bg);
+  color: var(--on-accent);
 }
 
 .degree-lesson-name {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 650;
   color: var(--text);
 }
 
 .degree-lesson-quality {
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
@@ -664,8 +664,8 @@
   background: var(--bg);
   color: var(--text);
   border-radius: 6px;
-  padding: 0.28rem 0.55rem;
-  font-size: 0.72rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -681,15 +681,15 @@
 }
 
 .degree-lesson-tone {
-  min-width: 1.75rem;
+  min-width: 2rem;
   text-align: center;
-  padding: 0.2rem 0.4rem;
+  padding: 0.28rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--accent);
-  background: rgba(100, 180, 255, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(100, 180, 255, 0.28);
+  color: var(--on-accent);
+  background: var(--accent);
+  box-shadow: none;
 }
 
 .degree-lesson-facts {
@@ -708,7 +708,7 @@
 
 .degree-lesson-facts dt {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 650;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -718,8 +718,8 @@
 
 .degree-lesson-facts dd {
   margin: 0;
-  font-size: 0.76rem;
-  line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--text);
 }
 
@@ -742,10 +742,10 @@
   appearance: none;
   border: 1px solid var(--border-strong);
   background: var(--bg);
-  color: var(--text-muted);
+  color: var(--text);
   border-radius: 6px;
-  padding: 0.28rem 0.55rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -758,7 +758,8 @@
 
 .roman-btn.is-active,
 .minor-form-btn.is-active {
-  color: var(--bg);
+  /* Dark text on mint — never light-on-accent */
+  color: var(--on-accent);
   background: var(--accent);
   border-color: var(--accent);
 }
@@ -797,7 +798,7 @@
 .quiz-collapsed-copy {
   margin: 0;
   padding: 0.45rem 1rem 0.7rem;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
 }
 
@@ -818,7 +819,7 @@
 
 .quiz-title {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -830,17 +831,17 @@
 
 .quiz-score {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .quiz-prompt {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .quiz-choices {
@@ -856,8 +857,8 @@
   background: var(--bg);
   color: var(--text);
   border-radius: 8px;
-  padding: 0.5rem 0.65rem;
-  font-size: 0.82rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -877,51 +878,54 @@
 }
 
 .quiz-choice.is-correct {
-  border-color: rgba(100, 200, 130, 0.7);
-  background: rgba(60, 140, 90, 0.18);
-  color: #b8f0c8;
+  border-color: var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
 }
 
 .quiz-choice.is-wrong {
-  border-color: rgba(220, 100, 100, 0.55);
-  background: rgba(140, 50, 50, 0.15);
-  color: #f0b0b0;
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+  color: var(--danger-text);
 }
 
 .quiz-choice.is-muted {
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .quiz-feedback {
   border-radius: 8px;
-  padding: 0.55rem 0.7rem;
+  padding: 0.65rem 0.85rem;
   border: 1px solid var(--border);
 }
 
 .quiz-feedback.is-correct {
-  border-color: rgba(100, 200, 130, 0.4);
-  background: rgba(60, 140, 90, 0.1);
+  border-color: var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
 }
 
 .quiz-feedback.is-wrong {
-  border-color: rgba(220, 100, 100, 0.35);
-  background: rgba(140, 50, 50, 0.08);
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+  color: var(--danger-text);
 }
 
 .quiz-feedback-label {
   margin: 0 0 0.25rem;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--accent);
+  color: inherit;
+  opacity: 0.9;
 }
 
 .quiz-explain {
   margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: inherit;
 }
 
 .quiz-actions {
@@ -935,32 +939,46 @@
 .quiz-secondary {
   appearance: none;
   border-radius: 6px;
-  padding: 0.35rem 0.7rem;
-  font-size: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
 }
 
 .quiz-primary {
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: var(--bg);
+  border: 1px solid var(--on-accent);
+  background: var(--on-accent);
+  color: var(--accent);
+}
+
+.quiz-feedback.is-correct .quiz-primary {
+  border-color: var(--success-text);
+  background: var(--success-text);
+  color: var(--success-bg);
+}
+
+.quiz-feedback.is-wrong .quiz-primary {
+  border-color: var(--danger-text);
+  background: var(--danger-text);
+  color: var(--danger-bg);
 }
 
 .quiz-secondary {
-  border: 1px solid var(--border-strong);
-  background: var(--bg);
-  color: var(--text);
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  opacity: 0.95;
 }
 
 .quiz-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  opacity: 1;
+  border-color: currentColor;
+  color: inherit;
 }
 
 .quiz-primary:focus-visible,
 .quiz-secondary:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--on-accent);
   outline-offset: 2px;
 }
 
@@ -976,7 +994,7 @@
 
 .analyzer-label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
@@ -1040,19 +1058,19 @@
 
 .analyzer-song-title {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .analyzer-song-meta,
 .analyzer-section-key,
 .analyzer-section-romans {
-  font-size: 0.75rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
 }
 
 .analyzer-timeline-title {
   margin: 0 0 0.5rem;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
 .analyzer-sections {
@@ -1068,11 +1086,11 @@
 
 .analyzer-section-name {
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 
 .analyzer-section-chords {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--accent);
 }
 
