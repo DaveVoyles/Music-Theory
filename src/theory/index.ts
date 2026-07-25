@@ -48,3 +48,16 @@ export {
   romanNumeral,
   transposeKey,
 } from './degrees'
+
+export {
+  ORDER_OF_FLATS,
+  ORDER_OF_SHARPS,
+  SHARP_LETTER_ORDER,
+  FLAT_LETTER_ORDER,
+  MAJOR_FIFTHS_FROM_C,
+  accidentalsForFifths,
+  fifthsForMajorSpelling,
+  keySignatureInfo,
+  type KeySignatureInfo,
+  type SignatureKind,
+} from './keySignature'

@@ -12,6 +12,7 @@ Presentational + interactive UI. Prefer reading/writing `useTheoryStore` over de
 | `MinorFormControl.tsx` | natural/harmonic/melodic (minor mode only) |
 | `AnalyzerPanel.tsx` | Fixture search, timeline, section → `selectKey` |
 | `HelpTip.tsx` | Accessible “?” popovers (What / How / Try this) from `help/featureHelp` |
+| `KeyLesson.tsx` | Live key-signature lesson (count, accidentals, why, mnemonic) |
 
 ## Conventions
 

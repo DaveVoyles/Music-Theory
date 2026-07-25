@@ -1,10 +1,10 @@
 # Music Theory
 
-Interactive music-theory workspace for advanced guitarists: dual-ring **Circle of Fifths**, **guitar fretboard** mapping, **aural feedback**, and a modular **song analyzer**.
+Interactive music-theory workspace for advanced guitarists: dual-ring **Circle of Fifths**, **guitar fretboard** mapping, **aural feedback**, a modular **song analyzer**, and live **teaching panels** (key signatures: how many sharps/flats, which notes, and why).
 
 **Live site:** [https://davevoyles.github.io/Music-Theory/](https://davevoyles.github.io/Music-Theory/)
 
-**Status:** Plan 0001 v1 complete (visual + audio + mock analyzer). Live LLM analysis via `HttpProvider` is the intentional next phase.
+**Status:** Plan 0001 v1 complete (visual + audio + mock analyzer). Pedagogy layer started (`keySignatureInfo` + KeyLesson). Live LLM analysis via `HttpProvider` is the intentional next phase.
 
 ---
 
@@ -18,7 +18,7 @@ A **static SPA** (GitHub Pages). One Zustand **theory store** is the source of t
 
 ```
 UI (React + Pixi)
-  CoF · Fretboard · Roman/minor controls · Analyzer
+  CoF · KeyLesson · Fretboard · Roman/minor · Analyzer · HelpTip
            │
            ▼
    useTheoryStore (Zustand + localStorage)
@@ -27,6 +27,7 @@ UI (React + Pixi)
      ▼           ▼
   theory/     analyzer/  (MockProvider | HttpProvider)
   cof/ audio/ fretboard/   domain DTO only — no vendor SDKs in UI
+  help/                    feature + lesson copy catalogs
 ```
 
 ### Non-negotiables (locked decisions)
