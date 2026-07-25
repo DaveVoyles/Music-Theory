@@ -1,5 +1,10 @@
-import { create } from 'zustand'
-import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware'
+import { create, type StateCreator, type StoreApi, type UseBoundStore } from 'zustand'
+import {
+  createJSONStorage,
+  persist,
+  type PersistOptions,
+  type StateStorage,
+} from 'zustand/middleware'
 import type { Degree, KeyRef, MinorForm, Mode, NoteSpelling, PitchClass } from '../theory'
 import { parseSpelling } from '../theory'
 
@@ -61,7 +66,6 @@ function resolveSpelling(key: PitchClass, spelling?: NoteSpelling): NoteSpelling
     }
     return spelling
   }
-  // Prefer sharp names for unspecified accidentals except common flat keys
   const names: NoteSpelling[] = [
     'C',
     'C#',
@@ -86,17 +90,17 @@ export interface CreateTheoryStoreOptions {
   persist?: boolean
 }
 
-export function createTheoryStore(options: CreateTheoryStoreOptions = {}) {
-  const usePersist = options.persist !== false
+type TheoryPersist = {
+  persist: {
+    hasHydrated: () => boolean
+    onFinishHydration: (fn: () => void) => () => void
+  }
+}
 
-  const initializer = (
-    set: (
-      partial:
-        | Partial<TheoryStore>
-        | ((state: TheoryStore) => Partial<TheoryStore>),
-    ) => void,
-    get: () => TheoryStore,
-  ): TheoryStore => ({
+export type TheoryStoreHook = UseBoundStore<StoreApi<TheoryStore>> & Partial<TheoryPersist>
+
+const createInitializer =
+  (): StateCreator<TheoryStore> => (set, get) => ({
     ...DEFAULT_THEORY_UI,
 
     setKey: (key, spelling) =>
@@ -127,12 +131,16 @@ export function createTheoryStore(options: CreateTheoryStoreOptions = {}) {
     resetTheoryUi: () => set({ ...DEFAULT_THEORY_UI }),
   })
 
+export function createTheoryStore(
+  options: CreateTheoryStoreOptions = {},
+): TheoryStoreHook {
+  const usePersist = options.persist !== false
+  const initializer = createInitializer()
+
   if (!usePersist) {
     return create<TheoryStore>()(initializer)
   }
 
-  // Always wrap with createJSONStorage so values are serialized strings
-  // (raw StateStorage can receive objects and break rehydrate).
   const baseStorage: StateStorage =
     options.storage ??
     ({
@@ -145,19 +153,19 @@ export function createTheoryStore(options: CreateTheoryStoreOptions = {}) {
       },
     } satisfies StateStorage)
 
-  return create<TheoryStore>()(
-    persist(initializer, {
-      name: THEORY_STORAGE_KEY,
-      storage: createJSONStorage(() => baseStorage),
-      partialize: (state) => ({
-        key: state.key,
-        keySpelling: state.keySpelling,
-        mode: state.mode,
-        minorForm: state.minorForm,
-        focusDegree: state.focusDegree,
-      }),
+  const persistOptions: PersistOptions<TheoryStore, TheoryUiState> = {
+    name: THEORY_STORAGE_KEY,
+    storage: createJSONStorage(() => baseStorage),
+    partialize: (state) => ({
+      key: state.key,
+      keySpelling: state.keySpelling,
+      mode: state.mode,
+      minorForm: state.minorForm,
+      focusDegree: state.focusDegree,
     }),
-  )
+  }
+
+  return create<TheoryStore>()(persist(initializer, persistOptions))
 }
 
 /** App singleton — theory UI state with localStorage rehydrate. */

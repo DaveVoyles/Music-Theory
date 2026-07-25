@@ -123,12 +123,16 @@ describe('localStorage rehydrate', () => {
     // zustand persist rehydrates async from storage
     await waitForPersist()
     await new Promise<void>((resolve) => {
-      const unsub = second.persist.onFinishHydration(() => {
+      const api = second.persist
+      if (!api) {
+        resolve()
+        return
+      }
+      const unsub = api.onFinishHydration(() => {
         unsub()
         resolve()
       })
-      // If already hydrated, resolve immediately
-      if (second.persist.hasHydrated()) {
+      if (api.hasHydrated()) {
         unsub()
         resolve()
       }
@@ -146,8 +150,9 @@ describe('localStorage rehydrate', () => {
     const store = createTheoryStore({ storage })
     store.getState().setMode('minor')
     await waitForPersist()
-    const raw = storage.getItem(THEORY_STORAGE_KEY)!
-    const parsed = JSON.parse(raw) as { state: Record<string, unknown> }
+    const raw = await Promise.resolve(storage.getItem(THEORY_STORAGE_KEY))
+    expect(raw).toBeTruthy()
+    const parsed = JSON.parse(raw as string) as { state: Record<string, unknown> }
     expect(parsed.state.setKey).toBeUndefined()
     expect(parsed.state.key).toBe(0)
     expect(parsed.state.mode).toBe('minor')
