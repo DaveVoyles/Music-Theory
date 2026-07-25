@@ -2,7 +2,7 @@
 
 Interactive music-theory workspace for advanced guitarists: Circle of Fifths, guitar fretboard mapping, aural feedback, and modular song analysis.
 
-**Status:** Planning complete (plan 0001 approved). Implementation via GitHub issues labeled `plan:0001`.
+**Status:** Plan 0001 in progress (scaffold + shell on main once D1 lands).
 
 ## Docs
 
@@ -15,6 +15,38 @@ Interactive music-theory workspace for advanced guitarists: Circle of Fifths, gu
 ## Stack (locked)
 
 React + Vite + TypeScript · PixiJS v8 · Zustand · Tone.js · GitHub Pages (`gh-pages` via Actions)
+
+## Develop
+
+```bash
+npm install
+npm run dev
+```
+
+### Production build & base path
+
+GitHub Pages project URL requires a non-root Vite `base` (default `/Music-Theory/`).
+
+```bash
+# Pages-shaped build (default)
+npm run build
+
+# Root hosting / local static preview without subpath
+VITE_BASE_PATH=/ npm run build
+npm run preview
+```
+
+Set `VITE_BASE_PATH` at CI deploy time if the site path changes.
+
+## Layout chrome (D1)
+
+Desktop-first dark shell:
+
+| Region | Role |
+|--------|------|
+| Left | Circle of Fifths (+ roman / minor-form slot) |
+| Right / bottom | Fretboard |
+| Bottom | Collapsible song analyzer |
 
 ## Issues
 
