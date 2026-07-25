@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { AnalyzerPanel } from './components/AnalyzerPanel'
 import { CircleOfFifths } from './components/CircleOfFifths'
+import { FeatureHeading, HelpTip } from './components/HelpTip'
 import { Fretboard } from './components/Fretboard'
 import { MinorFormControl } from './components/MinorFormControl'
 import { RomanStrip } from './components/RomanStrip'
@@ -9,6 +10,7 @@ import { useTheoryStore } from './store'
 
 /**
  * Desktop-first shell: CoF left, fretboard bottom/right, analyzer collapsible.
+ * Each major region exposes hover/focus help via HelpTip / FeatureHeading.
  */
 function App() {
   const [analyzerOpen, setAnalyzerOpen] = useState(true)
@@ -28,22 +30,32 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header-text">
-          <h1 className="app-title">Music Theory</h1>
+          <h1 className="app-title">
+            Music Theory
+            <HelpTip feature="app" />
+          </h1>
           <p className="app-subtitle">
-            Click the circle or a song section to set the key · click frets to hear notes
+            Hover the <span className="help-inline-hint">?</span> icons for what each
+            feature does · click the circle or a song section to set the key · click
+            frets to hear notes
           </p>
         </div>
-        <p className="app-key-badge" aria-live="polite">
-          {keyLabel}
-          <span className="app-key-badge-sub">{focusLabel}</span>
-        </p>
+        <div className="app-key-badge-wrap">
+          <p className="app-key-badge" aria-live="polite">
+            {keyLabel}
+            <span className="app-key-badge-sub">{focusLabel}</span>
+          </p>
+          <HelpTip feature="keyBadge" compact />
+        </div>
       </header>
 
       <div className="workspace">
         <aside className="panel panel-cof" aria-label="Circle of Fifths">
           <div className="panel-header">
-            <h2>Circle of Fifths</h2>
-            <span className="panel-meta">Outer major · inner minor</span>
+            <FeatureHeading
+              feature="circleOfFifths"
+              meta="Outer major · inner minor"
+            />
           </div>
           <div className="panel-body cof-pane">
             <CircleOfFifths />
@@ -54,15 +66,31 @@ function App() {
                 ? 'Minor form changes scale degrees 6/7 on the neck.'
                 : 'Select a degree to spotlight chord tones on the neck.'}
             </p>
-            <MinorFormControl />
-            <RomanStrip />
+            {mode === 'minor' ? (
+              <div className="control-row">
+                <span className="control-row-label">
+                  Minor form
+                  <HelpTip feature="minorForm" compact />
+                </span>
+                <MinorFormControl />
+              </div>
+            ) : null}
+            <div className="control-row">
+              <span className="control-row-label">
+                Degrees
+                <HelpTip feature="romanStrip" compact />
+              </span>
+              <RomanStrip />
+            </div>
           </div>
         </aside>
 
         <main className="panel panel-fretboard" aria-label="Fretboard">
           <div className="panel-header">
-            <h2>Fretboard</h2>
-            <span className="panel-meta">EADGBE · frets 0–12 · Low E/A/D emphasized</span>
+            <FeatureHeading
+              feature="fretboard"
+              meta="EADGBE · frets 0–12 · Low E/A/D emphasized"
+            />
           </div>
           <div className="panel-body fretboard-pane">
             <Fretboard />
@@ -76,10 +104,10 @@ function App() {
       >
         <div className="panel-header analyzer-header">
           <div>
-            <h2>Analyzer</h2>
-            <p className="panel-meta analyzer-hint">
-              Fixture songs only in v1 — section click jumps the whole workspace key
-            </p>
+            <FeatureHeading
+              feature="analyzer"
+              meta="Fixture songs in v1 — section click jumps the workspace key"
+            />
           </div>
           <button
             type="button"

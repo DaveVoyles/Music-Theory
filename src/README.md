@@ -22,6 +22,7 @@ Entry points and feature packages for the Music Theory SPA.
 | [`audio/`](audio/) | Tone.js prime / pitch / triad | [audio/README.md](audio/README.md) |
 | [`analyzer/`](analyzer/) | Song analysis providers + fixtures | [analyzer/README.md](analyzer/README.md) |
 | [`components/`](components/) | React + Pixi views | [components/README.md](components/README.md) |
+| [`help/`](help/) | Hover/focus feature explanations | [help/README.md](help/README.md) |
 
 ## Agent rules
 

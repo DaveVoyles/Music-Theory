@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { MockProvider, type SongAnalysis, type SongAnalysisSummary } from '../analyzer'
+import { HelpTip } from './HelpTip'
 import { useTheoryStore } from '../store'
 
 const provider = new MockProvider()
@@ -89,25 +90,36 @@ export function AnalyzerPanel() {
       </div>
 
       <div className="analyzer-columns">
-        <ul className="analyzer-results" aria-label="Fixture songs">
-          {results.map((s) => (
-            <li key={s.id}>
-              <button
-                type="button"
-                className={`analyzer-song-btn ${analysis?.id === s.id ? 'is-active' : ''}`}
-                onClick={() => void loadSong(s.id)}
-              >
-                <span className="analyzer-song-title">{s.title}</span>
-                <span className="analyzer-song-meta">
-                  {s.artist ? `${s.artist} · ` : ''}
-                  {s.primaryKeyLabel}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="analyzer-col">
+          <p className="analyzer-col-heading">
+            Songs
+            <HelpTip feature="analyzerSong" compact />
+          </p>
+          <ul className="analyzer-results" aria-label="Fixture songs">
+            {results.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className={`analyzer-song-btn ${analysis?.id === s.id ? 'is-active' : ''}`}
+                  title={`${s.title} — click to load sections and set primary key`}
+                  onClick={() => void loadSong(s.id)}
+                >
+                  <span className="analyzer-song-title">{s.title}</span>
+                  <span className="analyzer-song-meta">
+                    {s.artist ? `${s.artist} · ` : ''}
+                    {s.primaryKeyLabel}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="analyzer-timeline" aria-label="Section timeline">
+          <p className="analyzer-col-heading">
+            Sections
+            <HelpTip feature="analyzerSection" compact />
+          </p>
           {emptyCopy ? (
             <p className="empty-copy muted">{emptyCopy}</p>
           ) : (
@@ -124,6 +136,7 @@ export function AnalyzerPanel() {
                     <button
                       type="button"
                       className="analyzer-section-btn"
+                      title={`Jump workspace to ${sec.key.spelling} ${sec.key.mode}`}
                       onClick={() => applySection(sec.id)}
                     >
                       <span className="analyzer-section-name">

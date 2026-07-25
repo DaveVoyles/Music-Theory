@@ -11,6 +11,7 @@ Presentational + interactive UI. Prefer reading/writing `useTheoryStore` over de
 | `RomanStrip.tsx` | I–vii° + All → `focusDegree` |
 | `MinorFormControl.tsx` | natural/harmonic/melodic (minor mode only) |
 | `AnalyzerPanel.tsx` | Fixture search, timeline, section → `selectKey` |
+| `HelpTip.tsx` | Accessible “?” popovers (What / How / Try this) from `help/featureHelp` |
 
 ## Conventions
 
