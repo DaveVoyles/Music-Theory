@@ -114,7 +114,22 @@ UI Shell (dark split layout)
 ## Execution Tracking
 
 - **Issues:** https://github.com/DaveVoyles/Music-Theory/issues?q=is%3Aissue+state%3Aopen+label%3Aplan%3A0001
-- **Board:** Standing “Agent Work” Projects v2 board (seed if project scope available; otherwise issues-only frontier)
+- **Board:** [Agent Work](https://github.com/users/DaveVoyles/projects/2) (all D1–D10 seeded to Todo)
+
+| Deliverable | Issue |
+|-------------|-------|
+| D1 App scaffold | #1 |
+| D2 Theory engine | #2 |
+| D3 Zustand store | #4 |
+| D4 Circle of Fifths | #5 |
+| D5 Fretboard | #6 |
+| D6 Tone.js audio | #8 |
+| D7 Roman + minor form | #9 |
+| D8 Analyzer mock | #7 |
+| D9 GH Pages deploy | #3 |
+| D10 E2E polish | #10 |
+
+**Frontier (open, unblocked, unassigned):** #1 only until D1 lands.
 
 ## Approval
 
