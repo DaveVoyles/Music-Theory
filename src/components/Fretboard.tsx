@@ -6,7 +6,9 @@ import {
   buildNeck,
   type FretCell,
 } from '../fretboard/neck'
+import { theoryAudio } from '../audio'
 import { toKeyRef, useTheoryStore } from '../store'
+import type { PitchClass } from '../theory'
 
 const WIDTH = 720
 const HEIGHT = 220
@@ -107,7 +109,11 @@ function drawNeckChrome(g: Graphics) {
   }
 }
 
-function drawCells(layer: Container, cells: FretCell[]) {
+function drawCells(
+  layer: Container,
+  cells: FretCell[],
+  onNote: (pc: PitchClass) => void,
+) {
   layer.removeChildren()
   const { fretW, stringGap } = layout()
 
@@ -143,10 +149,9 @@ function drawCells(layer: Container, cells: FretCell[]) {
         alpha: active ? 0.9 : 0.3,
       })
     }
-    // Store pitch for future audio (D6)
-    ;(g as Graphics & { notePc?: number }).notePc = cell.pc
     g.eventMode = 'static'
     g.cursor = 'pointer'
+    g.on('pointertap', () => onNote(cell.pc))
     layer.addChild(g)
 
     if (cell.spelling && active) {
@@ -231,9 +236,12 @@ export function Fretboard() {
       cellsRef.current = cells
       readyRef.current = true
 
+      const onNote = (pc: PitchClass) => {
+        void theoryAudio.playPitch(pc)
+      }
       const state = useTheoryStore.getState()
       const neck = buildNeck(toKeyRef(state), state.focusDegree)
-      drawCells(cells, neck)
+      drawCells(cells, neck, onNote)
     })()
 
     return () => {
@@ -253,7 +261,10 @@ export function Fretboard() {
       mode,
       minorForm,
     }
-    drawCells(cellsRef.current, buildNeck(keyRef, focusDegree))
+    const onNote = (pc: PitchClass) => {
+      void theoryAudio.playPitch(pc)
+    }
+    drawCells(cellsRef.current, buildNeck(keyRef, focusDegree), onNote)
   }, [key, keySpelling, mode, minorForm, focusDegree])
 
   return (

@@ -8,6 +8,7 @@ import {
   wedgeStartAngle,
   type CofPosition,
 } from '../cof/circleData'
+import { theoryAudio } from '../audio'
 import { useTheoryStore } from '../store'
 import type { Mode, PitchClass } from '../theory'
 
@@ -194,6 +195,13 @@ export function CircleOfFifths() {
           key: sel.key,
           keySpelling: sel.keySpelling,
           mode: sel.mode,
+        })
+        const state = useTheoryStore.getState()
+        void theoryAudio.playTriad({
+          tonic: state.key,
+          tonicSpelling: state.keySpelling,
+          mode: state.mode,
+          minorForm: state.minorForm,
         })
       }
 
