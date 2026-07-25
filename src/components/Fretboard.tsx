@@ -17,26 +17,34 @@ const PAD_R = 16
 const PAD_T = 28
 const PAD_B = 24
 
+/** Light text for dark grey diatonic dots. */
 const labelStyle = new TextStyle({
-  fill: '#e8ecf1',
-  fontSize: 11,
+  fill: '#f0f3f7',
+  fontSize: 13,
   fontWeight: '600',
   fontFamily: 'system-ui, sans-serif',
 })
+/** Dark text for gold root and mint power-string dots. */
+const onAccentStyle = new TextStyle({
+  fill: '#042f2e',
+  fontSize: 13,
+  fontWeight: '700',
+  fontFamily: 'system-ui, sans-serif',
+})
 const rootStyle = new TextStyle({
-  fill: '#0d0f12',
-  fontSize: 11,
+  fill: '#1c1408',
+  fontSize: 13,
   fontWeight: '700',
   fontFamily: 'system-ui, sans-serif',
 })
 const fretNumStyle = new TextStyle({
-  fill: '#8b95a5',
-  fontSize: 10,
+  fill: '#a8b2c1',
+  fontSize: 12,
   fontFamily: 'system-ui, sans-serif',
 })
 const stringNameStyle = new TextStyle({
-  fill: '#8b95a5',
-  fontSize: 11,
+  fill: '#a8b2c1',
+  fontSize: 13,
   fontWeight: '600',
   fontFamily: 'system-ui, sans-serif',
 })
@@ -157,7 +165,11 @@ function drawCells(
     if (cell.spelling && active) {
       const t = new Text({
         text: cell.spelling,
-        style: cell.isRoot ? rootStyle : labelStyle,
+        style: cell.isRoot
+          ? rootStyle
+          : cell.powerEmphasis
+            ? onAccentStyle
+            : labelStyle,
       })
       t.anchor.set(0.5)
       t.position.set(x, y)

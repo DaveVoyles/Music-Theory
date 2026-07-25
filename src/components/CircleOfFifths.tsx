@@ -18,16 +18,32 @@ const INNER_R = 95
 const INNER_INNER_R = 48
 const SIZE = 360
 
+/** Light text for dark wedges. */
 const brightStyle = new TextStyle({
-  fill: '#e8ecf1',
-  fontSize: 13,
+  fill: '#f0f3f7',
+  fontSize: 15,
   fontWeight: '600',
   fontFamily: 'system-ui, sans-serif',
 })
 
+/** Dark text for bright mint/gold selected wedges (readable on accent fills). */
+const onAccentStyle = new TextStyle({
+  fill: '#042f2e',
+  fontSize: 15,
+  fontWeight: '700',
+  fontFamily: 'system-ui, sans-serif',
+})
+
+const onGoldStyle = new TextStyle({
+  fill: '#1c1408',
+  fontSize: 15,
+  fontWeight: '700',
+  fontFamily: 'system-ui, sans-serif',
+})
+
 const mutedStyle = new TextStyle({
-  fill: '#8b95a5',
-  fontSize: 12,
+  fill: '#a8b2c1',
+  fontSize: 14,
   fontWeight: '500',
   fontFamily: 'system-ui, sans-serif',
 })
@@ -105,8 +121,17 @@ function paintSelection(
       minorSelected ? 0xfbbf24 : selected ? 0xd4a017 : 0x343c49,
     )
 
-    gfx.majorLabel.style = majorSelected || selected ? brightStyle : mutedStyle
-    gfx.minorLabel.style = minorSelected || selected ? brightStyle : mutedStyle
+    // Bright fills need dark labels; dim pair-highlight keeps light labels
+    gfx.majorLabel.style = majorSelected
+      ? onAccentStyle
+      : selected
+        ? brightStyle
+        : mutedStyle
+    gfx.minorLabel.style = minorSelected
+      ? onGoldStyle
+      : selected
+        ? brightStyle
+        : mutedStyle
 
     const scale = majorSelected || minorSelected ? 1.03 : 1
     gfx.major.scale.set(scale)
