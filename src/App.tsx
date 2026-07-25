@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { AnalyzerPanel } from './components/AnalyzerPanel'
 import { CircleOfFifths } from './components/CircleOfFifths'
 import { Fretboard } from './components/Fretboard'
 import { MinorFormControl } from './components/MinorFormControl'
@@ -65,10 +66,8 @@ function App() {
           </button>
         </div>
         {analyzerOpen ? (
-          <div className="panel-body empty-pane">
-            <p className="empty-copy">
-              Mock song analysis panel will live here (SongAnalyzerProvider).
-            </p>
+          <div className="panel-body analyzer-body">
+            <AnalyzerPanel />
           </div>
         ) : null}
       </section>
