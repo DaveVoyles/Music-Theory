@@ -69,6 +69,31 @@ describe('theory store setters', () => {
     expect(store.getState().focusDegree).toBe(5)
   })
 
+  it('pickIntervalNote fills A then B then replaces B', () => {
+    store.getState().pickIntervalNote({ pc: 0, spelling: 'C' })
+    expect(store.getState().intervalA).toEqual({ pc: 0, spelling: 'C' })
+    expect(store.getState().intervalB).toBeNull()
+    store.getState().pickIntervalNote({ pc: 7, spelling: 'G' })
+    expect(store.getState().intervalB).toEqual({ pc: 7, spelling: 'G' })
+    store.getState().pickIntervalNote({ pc: 4, spelling: 'E' })
+    expect(store.getState().intervalA).toEqual({ pc: 0, spelling: 'C' })
+    expect(store.getState().intervalB).toEqual({ pc: 4, spelling: 'E' })
+  })
+
+  it('selectKey seeds interval from previous tonic to new tonic', () => {
+    store.getState().selectKey({ key: 7, keySpelling: 'G', mode: 'major' })
+    expect(store.getState().intervalA).toEqual({ pc: 0, spelling: 'C' })
+    expect(store.getState().intervalB).toEqual({ pc: 7, spelling: 'G' })
+  })
+
+  it('toggleNeckLabelMode flips notes ↔ degrees', () => {
+    expect(store.getState().neckLabelMode).toBe('notes')
+    store.getState().toggleNeckLabelMode()
+    expect(store.getState().neckLabelMode).toBe('degrees')
+    store.getState().toggleNeckLabelMode()
+    expect(store.getState().neckLabelMode).toBe('notes')
+  })
+
   it('toggleFocusDegree clears when the same degree is selected again', () => {
     store.getState().toggleFocusDegree(2)
     expect(store.getState().focusDegree).toBe(2)

@@ -4,143 +4,216 @@ import {
   FRET_COUNT,
   OPEN_STRING_NAMES,
   buildNeck,
+  midiAt,
   type FretCell,
 } from '../fretboard/neck'
 import { theoryAudio } from '../audio'
-import { toKeyRef, useTheoryStore } from '../store'
-import type { PitchClass } from '../theory'
+import { toKeyRef, useTheoryStore, type NeckLabelMode } from '../store'
+import type { PitchPick } from '../theory'
 
-const WIDTH = 720
-const HEIGHT = 220
-const PAD_L = 48
-const PAD_R = 16
-const PAD_T = 28
-const PAD_B = 24
+const CHROMATIC_SPELLINGS = [
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#',
+  'A',
+  'A#',
+  'B',
+] as const
 
-/** Light text for dark grey diatonic dots. */
-const labelStyle = new TextStyle({
-  fill: '#f0f3f7',
-  fontSize: 13,
-  fontWeight: '600',
-  fontFamily: 'system-ui, sans-serif',
-})
-/** Dark text for gold root and mint power-string dots. */
-const onAccentStyle = new TextStyle({
-  fill: '#042f2e',
-  fontSize: 13,
-  fontWeight: '700',
-  fontFamily: 'system-ui, sans-serif',
-})
-const rootStyle = new TextStyle({
-  fill: '#1c1408',
-  fontSize: 13,
-  fontWeight: '700',
-  fontFamily: 'system-ui, sans-serif',
-})
-const fretNumStyle = new TextStyle({
-  fill: '#a8b2c1',
-  fontSize: 12,
-  fontFamily: 'system-ui, sans-serif',
-})
-const stringNameStyle = new TextStyle({
-  fill: '#a8b2c1',
-  fontSize: 13,
-  fontWeight: '600',
-  fontFamily: 'system-ui, sans-serif',
-})
+/** Minimum drawable size — below this we wait for a real layout. */
+const MIN_W = 320
+const MIN_H = 160
 
-function layout() {
-  const innerW = WIDTH - PAD_L - PAD_R
-  const innerH = HEIGHT - PAD_T - PAD_B
+interface LayoutMetrics {
+  width: number
+  height: number
+  padL: number
+  padR: number
+  padT: number
+  padB: number
+  fretW: number
+  stringGap: number
+  /** Scale factor vs a ~1000×420 reference for fonts/radii. */
+  scale: number
+}
+
+function computeLayout(width: number, height: number): LayoutMetrics {
+  // Scale dots/labels with both width and height so a tall wide neck is readable.
+  const scale = Math.min(
+    Math.max(width / 900, height / 300, 0.95),
+    2.5,
+  )
+  const padL = Math.round(60 * scale)
+  const padR = Math.round(22 * scale)
+  const padT = Math.round(42 * scale)
+  const padB = Math.round(40 * scale)
+  const innerW = width - padL - padR
+  const innerH = height - padT - padB
   const fretW = innerW / FRET_COUNT
   const stringGap = innerH / 5 // 6 strings → 5 gaps (low E at bottom)
-  return { innerW, innerH, fretW, stringGap }
+  return { width, height, padL, padR, padT, padB, fretW, stringGap, scale }
 }
 
-function stringY(stringIndex: number, stringGap: number): number {
+function stringY(stringIndex: number, m: LayoutMetrics): number {
   // stringIndex 0 = low E at bottom
-  return PAD_T + (5 - stringIndex) * stringGap
+  return m.padT + (5 - stringIndex) * m.stringGap
 }
 
-function fretX(fret: number, fretW: number): number {
+function fretX(fret: number, m: LayoutMetrics): number {
   // open notes sit just left of fret 1; fretted notes centered in fret cell
-  if (fret === 0) return PAD_L - 14
-  return PAD_L + (fret - 0.5) * fretW
+  if (fret === 0) return m.padL - Math.round(16 * m.scale)
+  return m.padL + (fret - 0.5) * m.fretW
 }
 
-function drawNeckChrome(g: Graphics) {
-  const { fretW, stringGap } = layout()
+function makeStyles(scale: number) {
+  const noteSize = Math.round(15 * scale)
+  const guideSize = Math.round(14 * scale)
+  const fretSize = Math.round(13 * scale)
+  return {
+    onAccent: new TextStyle({
+      fill: '#042f2e',
+      fontSize: noteSize,
+      fontWeight: '700',
+      fontFamily: 'system-ui, sans-serif',
+    }),
+    root: new TextStyle({
+      fill: '#1c1408',
+      fontSize: noteSize,
+      fontWeight: '700',
+      fontFamily: 'system-ui, sans-serif',
+    }),
+    fretNum: new TextStyle({
+      fill: '#a8b2c1',
+      fontSize: fretSize,
+      fontFamily: 'system-ui, sans-serif',
+    }),
+    stringName: new TextStyle({
+      fill: '#a8b2c1',
+      fontSize: guideSize,
+      fontWeight: '600',
+      fontFamily: 'system-ui, sans-serif',
+    }),
+  }
+}
+
+function drawNeckChrome(g: Graphics, m: LayoutMetrics) {
   g.clear()
+  const boardH = 5 * m.stringGap + Math.round(20 * m.scale)
+  const boardTop = m.padT - Math.round(10 * m.scale)
 
   // Fingerboard background
-  g.rect(PAD_L, PAD_T - 8, FRET_COUNT * fretW, 5 * stringGap + 16)
+  g.rect(m.padL, boardTop, FRET_COUNT * m.fretW, boardH)
   g.fill({ color: 0x1a1f27, alpha: 0.95 })
 
   // Nut
-  g.rect(PAD_L - 3, PAD_T - 8, 4, 5 * stringGap + 16)
+  g.rect(m.padL - 3, boardTop, Math.max(4, Math.round(5 * m.scale)), boardH)
   g.fill({ color: 0xe8ecf1, alpha: 0.85 })
 
   // Frets
   for (let f = 1; f <= FRET_COUNT; f++) {
-    const x = PAD_L + f * fretW
-    g.moveTo(x, PAD_T - 6)
-    g.lineTo(x, PAD_T + 5 * stringGap + 6)
-    g.stroke({ width: f === 12 ? 2 : 1, color: 0x5a6575, alpha: 0.9 })
+    const x = m.padL + f * m.fretW
+    g.moveTo(x, boardTop + 2)
+    g.lineTo(x, boardTop + boardH - 2)
+    g.stroke({
+      width: f === 12 ? Math.max(2, 2.5 * m.scale) : Math.max(1, 1.25 * m.scale),
+      color: 0x5a6575,
+      alpha: 0.9,
+    })
   }
 
-  // Strings — Low E/A/D thicker
+  // Strings — Low E/A/D thicker (power-string emphasis, not color meaning)
   for (let s = 0; s < 6; s++) {
-    const y = stringY(s, stringGap)
+    const y = stringY(s, m)
     const power = s <= 2
-    g.moveTo(PAD_L, y)
-    g.lineTo(PAD_L + FRET_COUNT * fretW, y)
+    g.moveTo(m.padL, y)
+    g.lineTo(m.padL + FRET_COUNT * m.fretW, y)
     g.stroke({
-      width: power ? 2.4 : 1.2,
+      width: power ? 3.2 * m.scale : 1.6 * m.scale,
       color: power ? 0xb8c0cc : 0x6b7585,
       alpha: 0.95,
     })
   }
 
   // Inlay dots on frets 3,5,7,9,12
+  const inlayR = Math.max(3.5, 5 * m.scale)
   for (const f of [3, 5, 7, 9, 12]) {
-    const x = PAD_L + (f - 0.5) * fretW
-    const midY = PAD_T + 2.5 * stringGap
+    const x = m.padL + (f - 0.5) * m.fretW
+    const midY = m.padT + 2.5 * m.stringGap
     if (f === 12) {
-      g.circle(x, midY - 14, 3.5)
+      const offset = Math.round(20 * m.scale)
+      g.circle(x, midY - offset, inlayR)
       g.fill({ color: 0x5eead4, alpha: 0.35 })
-      g.circle(x, midY + 14, 3.5)
+      g.circle(x, midY + offset, inlayR)
       g.fill({ color: 0x5eead4, alpha: 0.35 })
     } else {
-      g.circle(x, midY, 3.5)
+      g.circle(x, midY, inlayR)
       g.fill({ color: 0x5eead4, alpha: 0.28 })
     }
   }
 }
 
+function cellLabel(cell: FretCell, labelMode: NeckLabelMode): string | null {
+  if (!cell.isDiatonic || !cell.isChordTone) return null
+  if (labelMode === 'degrees') {
+    return cell.scaleDegree !== null ? String(cell.scaleDegree) : null
+  }
+  return cell.spelling
+}
+
+function isIntervalPick(cell: FretCell, a: PitchPick | null, b: PitchPick | null): boolean {
+  return (
+    (a !== null && cell.pc === a.pc) || (b !== null && cell.pc === b.pc)
+  )
+}
+
 function drawCells(
   layer: Container,
   cells: FretCell[],
-  onNote: (pc: PitchClass) => void,
+  m: LayoutMetrics,
+  styles: ReturnType<typeof makeStyles>,
+  labelMode: NeckLabelMode,
+  intervalA: PitchPick | null,
+  intervalB: PitchPick | null,
+  onNote: (cell: FretCell) => void,
 ) {
   layer.removeChildren()
-  const { fretW, stringGap } = layout()
 
   for (const cell of cells) {
-    const x = fretX(cell.fret, fretW)
-    const y = stringY(cell.stringIndex, stringGap)
+    const x = fretX(cell.fret, m)
+    const y = stringY(cell.stringIndex, m)
+    const picked = isIntervalPick(cell, intervalA, intervalB)
 
     if (!cell.isDiatonic) {
-      // dark non-diatonic tick
+      // dark non-diatonic tick — outside the key (still clickable for intervals)
       const g = new Graphics()
-      g.circle(x, y, cell.powerEmphasis ? 3.5 : 2.5)
-      g.fill({ color: 0x0d0f12, alpha: 0.55 })
+      const r = (picked ? 7 : cell.powerEmphasis ? 4.5 : 3.5) * m.scale
+      g.circle(x, y, r)
+      g.fill({
+        color: picked ? 0x818cf8 : 0x0d0f12,
+        alpha: picked ? 0.9 : 0.55,
+      })
+      if (picked) {
+        g.stroke({ width: 1.5 * m.scale, color: 0xc7d2fe, alpha: 1 })
+      }
+      g.eventMode = 'static'
+      g.cursor = 'pointer'
+      g.on('pointertap', () => onNote(cell))
       layer.addChild(g)
       continue
     }
 
-    // When focus is on, non-chord tones are dimmed diatonic labels
+    // Gold = root (tonic). Teal/green = in the key (scale tones).
+    // When a degree is focused, non-chord tones stay dimmed.
+    // Violet ring = currently in the interval pick pair.
     const active = cell.isChordTone
-    const r = cell.isRoot ? 12 : cell.powerEmphasis ? 10 : 8
+    const r =
+      (cell.isRoot ? 16 : cell.powerEmphasis ? 14 : 12) * m.scale
     const g = new Graphics()
     if (cell.isRoot) {
       g.circle(x, y, r)
@@ -148,28 +221,29 @@ function drawCells(
     } else {
       g.circle(x, y, r)
       g.fill({
-        color: cell.powerEmphasis ? 0x2dd4bf : 0x3d4a5c,
-        alpha: active ? (cell.powerEmphasis ? 0.95 : 0.85) : 0.25,
+        color: 0x2dd4bf,
+        alpha: active ? 0.95 : 0.28,
       })
       g.stroke({
-        width: 1,
-        color: cell.powerEmphasis ? 0x5eead4 : 0x5a6575,
-        alpha: active ? 0.9 : 0.3,
+        width: 1.4 * m.scale,
+        color: 0x5eead4,
+        alpha: active ? 0.95 : 0.35,
       })
+    }
+    if (picked) {
+      g.circle(x, y, r + 3.5 * m.scale)
+      g.stroke({ width: 2.2 * m.scale, color: 0xa5b4fc, alpha: 1 })
     }
     g.eventMode = 'static'
     g.cursor = 'pointer'
-    g.on('pointertap', () => onNote(cell.pc))
+    g.on('pointertap', () => onNote(cell))
     layer.addChild(g)
 
-    if (cell.spelling && active) {
+    const label = cellLabel(cell, labelMode)
+    if (label) {
       const t = new Text({
-        text: cell.spelling,
-        style: cell.isRoot
-          ? rootStyle
-          : cell.powerEmphasis
-            ? onAccentStyle
-            : labelStyle,
+        text: label,
+        style: cell.isRoot ? styles.root : styles.onAccent,
       })
       t.anchor.set(0.5)
       t.position.set(x, y)
@@ -179,32 +253,41 @@ function drawCells(
   }
 }
 
-function drawGuides(layer: Container) {
+function drawGuides(
+  layer: Container,
+  m: LayoutMetrics,
+  styles: ReturnType<typeof makeStyles>,
+) {
   layer.removeChildren()
-  const { fretW, stringGap } = layout()
   for (let s = 0; s < 6; s++) {
-    const t = new Text({ text: OPEN_STRING_NAMES[s]!, style: stringNameStyle })
+    const t = new Text({ text: OPEN_STRING_NAMES[s]!, style: styles.stringName })
     t.anchor.set(1, 0.5)
-    t.position.set(PAD_L - 10, stringY(s, stringGap))
+    t.position.set(m.padL - Math.round(12 * m.scale), stringY(s, m))
     layer.addChild(t)
   }
   for (let f = 1; f <= FRET_COUNT; f++) {
     if (![3, 5, 7, 9, 12].includes(f)) continue
-    const t = new Text({ text: String(f), style: fretNumStyle })
+    const t = new Text({ text: String(f), style: styles.fretNum })
     t.anchor.set(0.5, 0)
-    t.position.set(PAD_L + (f - 0.5) * fretW, HEIGHT - PAD_B + 4)
+    t.position.set(m.padL + (f - 0.5) * m.fretW, m.height - m.padB + 4)
     layer.addChild(t)
   }
 }
 
 /**
- * Pixi fretboard: EADGBE frets 0–12, diatonic labels, root emphasis, E/A/D weight.
- * Reacts instantly to theory store key / focusDegree.
+ * Pixi fretboard: EADGBE frets 0–12.
+ * Gold = root (tonic); teal = notes in the key; dark = outside the key.
+ * Labels toggle notes vs scale degrees; clicks feed the interval lesson.
+ * Fills its host container and redraws on resize.
  */
 export function Fretboard() {
   const hostRef = useRef<HTMLDivElement>(null)
+  const appRef = useRef<Application | null>(null)
   const chromeRef = useRef<Graphics | null>(null)
+  const guidesRef = useRef<Container | null>(null)
   const cellsRef = useRef<Container | null>(null)
+  const layoutRef = useRef<LayoutMetrics | null>(null)
+  const stylesRef = useRef<ReturnType<typeof makeStyles> | null>(null)
   const readyRef = useRef(false)
 
   const key = useTheoryStore((s) => s.key)
@@ -212,17 +295,69 @@ export function Fretboard() {
   const mode = useTheoryStore((s) => s.mode)
   const minorForm = useTheoryStore((s) => s.minorForm)
   const focusDegree = useTheoryStore((s) => s.focusDegree)
+  const neckLabelMode = useTheoryStore((s) => s.neckLabelMode)
+  const intervalA = useTheoryStore((s) => s.intervalA)
+  const intervalB = useTheoryStore((s) => s.intervalB)
+  const toggleNeckLabelMode = useTheoryStore((s) => s.toggleNeckLabelMode)
+
+  const paintCells = () => {
+    if (!readyRef.current || !cellsRef.current || !layoutRef.current || !stylesRef.current)
+      return
+    const state = useTheoryStore.getState()
+    const onNote = (cell: FretCell) => {
+      const spelling =
+        cell.spelling ?? CHROMATIC_SPELLINGS[cell.pc] ?? String(cell.pc)
+      state.pickIntervalNote({ pc: cell.pc, spelling })
+      // Real guitar register: low E open = E2 … high e open = E4.
+      void theoryAudio.playMidi(midiAt(cell.stringIndex, cell.fret))
+    }
+    drawCells(
+      cellsRef.current,
+      buildNeck(toKeyRef(state), state.focusDegree),
+      layoutRef.current,
+      stylesRef.current,
+      state.neckLabelMode,
+      state.intervalA,
+      state.intervalB,
+      onNote,
+    )
+  }
+
+  const paintAll = (width: number, height: number) => {
+    const app = appRef.current
+    const chrome = chromeRef.current
+    const guides = guidesRef.current
+    if (!app || !chrome || !guides) return
+
+    const w = Math.max(MIN_W, Math.floor(width))
+    const h = Math.max(MIN_H, Math.floor(height))
+    app.renderer.resize(w, h)
+
+    const m = computeLayout(w, h)
+    layoutRef.current = m
+    stylesRef.current = makeStyles(m.scale)
+
+    drawNeckChrome(chrome, m)
+    drawGuides(guides, m, stylesRef.current)
+    paintCells()
+  }
 
   useEffect(() => {
     const host = hostRef.current
     if (!host) return
     let cancelled = false
+    let ro: ResizeObserver | null = null
     const app = new Application()
 
     void (async () => {
+      // Start with host size if already laid out; otherwise a sensible default.
+      const rect = host.getBoundingClientRect()
+      const initW = Math.max(MIN_W, Math.floor(rect.width) || 1000)
+      const initH = Math.max(MIN_H, Math.floor(rect.height) || 420)
+
       await app.init({
-        width: WIDTH,
-        height: HEIGHT,
+        width: initW,
+        height: initH,
         backgroundAlpha: 0,
         antialias: true,
         resolution: window.devicePixelRatio || 1,
@@ -232,60 +367,131 @@ export function Fretboard() {
         app.destroy(true)
         return
       }
+
       host.replaceChildren(app.canvas)
+      // Canvas fills the host; drawing follows content-box size via resize.
+      app.canvas.style.width = '100%'
+      app.canvas.style.height = '100%'
+      app.canvas.style.display = 'block'
 
       const chrome = new Graphics()
-      drawNeckChrome(chrome)
       app.stage.addChild(chrome)
       chromeRef.current = chrome
 
       const guides = new Container()
-      drawGuides(guides)
       app.stage.addChild(guides)
+      guidesRef.current = guides
 
       const cells = new Container()
       app.stage.addChild(cells)
       cellsRef.current = cells
+
+      appRef.current = app
       readyRef.current = true
 
-      const onNote = (pc: PitchClass) => {
-        void theoryAudio.playPitch(pc)
-      }
-      const state = useTheoryStore.getState()
-      const neck = buildNeck(toKeyRef(state), state.focusDegree)
-      drawCells(cells, neck, onNote)
+      paintAll(initW, initH)
+
+      ro = new ResizeObserver((entries) => {
+        const entry = entries[0]
+        if (!entry || cancelled) return
+        const { width, height } = entry.contentRect
+        if (width < 40 || height < 40) return
+        paintAll(width, height)
+      })
+      ro.observe(host)
     })()
 
     return () => {
       cancelled = true
       readyRef.current = false
+      ro?.disconnect()
       cellsRef.current = null
+      guidesRef.current = null
       chromeRef.current = null
+      appRef.current = null
+      layoutRef.current = null
+      stylesRef.current = null
       app.destroy(true)
     }
   }, [])
 
   useEffect(() => {
-    if (!readyRef.current || !cellsRef.current) return
-    const keyRef = {
-      tonic: key,
-      tonicSpelling: keySpelling,
-      mode,
-      minorForm,
-    }
-    const onNote = (pc: PitchClass) => {
-      void theoryAudio.playPitch(pc)
-    }
-    drawCells(cellsRef.current, buildNeck(keyRef, focusDegree), onNote)
-  }, [key, keySpelling, mode, minorForm, focusDegree])
+    paintCells()
+  }, [
+    key,
+    keySpelling,
+    mode,
+    minorForm,
+    focusDegree,
+    neckLabelMode,
+    intervalA,
+    intervalB,
+  ])
 
   return (
-    <div
-      className="fretboard-root"
-      ref={hostRef}
-      aria-label="Guitar fretboard map"
-      role="img"
-    />
+    <div className="fretboard-wrap">
+      <div className="fretboard-toolbar">
+        <div className="fretboard-label-toggle" role="group" aria-label="Neck label mode">
+          <button
+            type="button"
+            className={`fretboard-toggle-btn${neckLabelMode === 'notes' ? ' is-active' : ''}`}
+            aria-pressed={neckLabelMode === 'notes'}
+            onClick={() => {
+              if (neckLabelMode !== 'notes') toggleNeckLabelMode()
+            }}
+          >
+            Note names
+          </button>
+          <button
+            type="button"
+            className={`fretboard-toggle-btn${neckLabelMode === 'degrees' ? ' is-active' : ''}`}
+            aria-pressed={neckLabelMode === 'degrees'}
+            onClick={() => {
+              if (neckLabelMode !== 'degrees') toggleNeckLabelMode()
+            }}
+          >
+            Degrees 1–7
+          </button>
+        </div>
+        <p className="fretboard-toolbar-hint">
+          Click two frets to measure an interval
+        </p>
+      </div>
+      <div
+        className="fretboard-root"
+        ref={hostRef}
+        aria-label="Guitar fretboard map"
+        role="img"
+      />
+      <ul className="fretboard-legend" aria-label="Fretboard color legend">
+        <li>
+          <span className="fretboard-swatch fretboard-swatch--root" aria-hidden />
+          <span>
+            <strong>Gold</strong> = root (tonic of {keySpelling} {mode})
+          </span>
+        </li>
+        <li>
+          <span className="fretboard-swatch fretboard-swatch--scale" aria-hidden />
+          <span>
+            <strong>Green</strong> = notes in the key
+            {focusDegree !== null ? ' (dimmed = not this chord)' : ''}
+            {neckLabelMode === 'degrees' ? ' · labels are scale degrees' : ''}
+          </span>
+        </li>
+        <li>
+          <span className="fretboard-swatch fretboard-swatch--out" aria-hidden />
+          <span>
+            <strong>Dark</strong> = outside the key
+          </span>
+        </li>
+        <li>
+          <span className="fretboard-swatch fretboard-swatch--pick" aria-hidden />
+          <span>
+            <strong>Violet ring</strong> = interval pick
+          </span>
+        </li>
+      </ul>
+    </div>
   )
 }
 

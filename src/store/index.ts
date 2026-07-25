@@ -4,6 +4,7 @@ export {
   createTheoryStore,
   toKeyRef,
   useTheoryStore,
+  type NeckLabelMode,
   type TheoryStore,
   type TheoryUiActions,
   type TheoryUiState,

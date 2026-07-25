@@ -74,6 +74,7 @@ export {
   QUIZ_MINOR_KEYS,
   makeDegreeChordQuestion,
   makeDegreeFunctionQuestion,
+  makeEarDegreeQuestion,
   makeSignatureAccidentalsQuestion,
   makeSignatureCountQuestion,
   mulberry32,
@@ -82,3 +83,25 @@ export {
   type QuizQuestion,
   type Rng,
 } from './quiz'
+
+export {
+  INTERVAL_BY_SEMITONES,
+  ascendingSemitones,
+  asPick,
+  intervalInfo,
+  type IntervalInfo,
+  type IntervalQuality,
+  type PitchPick,
+} from './intervals'
+
+export {
+  staffSignatureLayout,
+  type StaffAccidentalPos,
+  type StaffSignatureLayout,
+} from './staff'
+
+export {
+  PROGRESSION_PRESETS,
+  progressionsForMode,
+  type ProgressionPreset,
+} from './progressions'

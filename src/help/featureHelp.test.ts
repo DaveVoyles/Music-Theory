@@ -13,6 +13,8 @@ describe('FEATURE_HELP catalog', () => {
       'quiz',
       'minorForm',
       'fretboard',
+      'intervalLesson',
+      'progression',
       'analyzer',
     ] as const) {
       const h = FEATURE_HELP[id]

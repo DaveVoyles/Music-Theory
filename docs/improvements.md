@@ -19,18 +19,22 @@ Ideas ranked for impact vs. effort. Not committed work — pick via a new plan/i
 ## Product / UX
 
 5. **Degree focus + audio** — play triad (or arpeggio) when selecting a roman degree.  
-6. **Fret click octave** — map string+fret to a more realistic octave than fixed C4 band.  
+6. ~~**Fret click octave**~~ — shipped (`midiAt` / `playMidi` for concert register).  
 7. **Compact mobile layout** — plan scoped desktop-first; stack order and touch targets need a deliberate pass.  
 8. **SPA 404.html → index.html** — if deep links/routes are added later (plan-lenses note).
 
 ## Teaching / pedagogy
 
-13. **Interval lesson** — when two frets or two CoF keys are in focus, explain the interval name + semitones.  
+13. ~~**Interval lesson**~~ — shipped (`intervals.ts` + `IntervalLesson`; frets + CoF pair).  
 14. ~~**Degree function blurbs**~~ — shipped (`DegreeLesson`).  
 15. ~~**Quiz mode**~~ — shipped (`quiz.ts` + `QuizPanel`).  
-16. **Staff notation sketch** — optional SVG key signature next to the pill list.  
+16. ~~**Staff notation sketch**~~ — shipped (`StaffSignature` + `staff.ts`).  
 17. ~~**Play degree triad on select**~~ — shipped (`playDegreeTriad` + roman strip / Hear triad).  
-18. **Ear quiz** — “which degree did you hear?” using `playDegreeTriad`.
+18. ~~**Ear quiz**~~ — shipped (`makeEarDegreeQuestion` + Replay in `QuizPanel`).  
+19. ~~**Scale-degree numbers on neck**~~ — shipped (`neckLabelMode` notes/degrees toggle).  
+20. ~~**Progression player**~~ — shipped (`progressions.ts` + `ProgressionPanel`).  
+21. **CAGED / box shapes overlay** — optional pattern layer on the neck.  
+22. **Custom progression builder** — drag/drop degrees beyond presets.
 
 ## Engineering hygiene
 

@@ -30,8 +30,14 @@ export const FEATURE_HELP = {
   keyLesson: {
     title: 'Key signature lesson',
     what: 'How many sharps or flats the current key uses, which notes they are, and why — tied to the Circle of Fifths.',
-    how: 'Updates live when you change key. Shows the accidental list in staff order, the scale with accidentals highlighted, a short “why” (fifths from C), a mnemonic for the order of sharps/flats, and the relative major/minor pair that share this signature.',
-    tryThis: 'Click C (0 accidentals), then G (1 sharp: F#), then D (2 sharps), then F (1 flat: Bb). Watch the count climb as you walk the circle.',
+    how: 'Updates live when you change key. Shows a treble-staff sketch of the signature, the accidental list in staff order, the scale with accidentals highlighted, a short “why” (fifths from C), a mnemonic for the order of sharps/flats, and the relative major/minor pair that share this signature.',
+    tryThis: 'Click C (0 accidentals), then G (1 sharp: F#), then D (2 sharps), then F (1 flat: Bb). Watch the staff and the count climb as you walk the circle.',
+  },
+  progression: {
+    title: 'Progression player',
+    what: 'Common chord progressions in the current key (pop I–V–vi–IV, jazz ii–V–I, minor i–VI–III–VII, and more).',
+    how: 'Pick a preset, hit Play — each degree triad sounds in order while the neck focuses that chord’s tones. Stop cancels the sequence. Major and minor modes get different preset lists.',
+    tryThis: 'In C major play I–V–vi–IV, then switch the Circle to A minor and try i–VI–III–VII.',
   },
   circleOfFifths: {
     title: 'Circle of Fifths',
@@ -53,9 +59,15 @@ export const FEATURE_HELP = {
   },
   quiz: {
     title: 'Theory quiz',
-    what: 'Active-recall drills on key signatures and degree functions — the same facts the lesson panels teach.',
-    how: 'Answer multiple choice (count of sharps/flats, which accidentals, degree names, chord tones). After each answer you get an explanation. “Show on workspace” jumps the Circle, neck, and lessons to that key/degree.',
-    tryThis: 'Miss one on purpose, read the explain text, hit Show on workspace, then Next question.',
+    what: 'Active-recall drills on key signatures, degree functions, and ear training (hear a triad, pick the degree).',
+    how: 'Answer multiple choice (count of sharps/flats, which accidentals, degree names, chord tones, or roman numeral after listening). Ear items auto-play a triad and offer Replay. After each answer you get an explanation. “Show on workspace” jumps the Circle, neck, and lessons to that key/degree.',
+    tryThis: 'When you get an ear question, use Replay a few times before answering — then Show on workspace to see that degree on the neck.',
+  },
+  intervalLesson: {
+    title: 'Interval lesson',
+    what: 'Names the distance between two pitches (unison through major seventh) in semitones and interval quality.',
+    how: 'Click two frets on the neck (first note, then second). Or click two keys on the Circle of Fifths — the previous tonic and the new one become the pair. Hear the interval ascending, then together. Clear resets the pair; a third fret click keeps the first note and replaces the second.',
+    tryThis: 'In C major click C then G — perfect fifth. Then C then E — major third. Compare on the Circle: C → G is also a fifth between keys.',
   },
   minorForm: {
     title: 'Minor form',
@@ -65,9 +77,9 @@ export const FEATURE_HELP = {
   },
   fretboard: {
     title: 'Guitar fretboard',
-    what: 'Standard tuning (EADGBE), open string through fret 12, showing where the current key lives on the neck.',
-    how: 'Diatonic notes are labeled; the root is gold; non-diatonic frets stay dark. Low E, A, and D strings are drawn stronger for power-chord / root-fifth practice. Click a lit note to hear its pitch.',
-    tryThis: 'Change the Circle to G major — F# should appear; F natural should go dark.',
+    what: 'Standard tuning (EADGBE), open string through fret 12 — a map of where the current key lives on the neck.',
+    how: 'Color meaning: gold = the root (tonic); green/teal = notes in the key; dark = outside the key; violet ring = notes in your interval pick. Toggle “Note names” vs “Degrees 1–7” for labels. When you pick a roman degree, only that chord’s tones stay bright. Click frets to hear them and to build an interval (two clicks). Low E, A, and D strings are drawn thicker for power-chord practice.',
+    tryThis: 'Select B major — green dots are scale notes; gold is every B. Switch to Degrees 1–7 and find all the 5s (dominant). Click two frets to open the Interval lesson.',
   },
   analyzer: {
     title: 'Song analyzer',

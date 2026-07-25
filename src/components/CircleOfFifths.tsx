@@ -12,16 +12,16 @@ import { theoryAudio } from '../audio'
 import { useTheoryStore } from '../store'
 import type { Mode, PitchClass } from '../theory'
 
-const OUTER_R = 150
-const OUTER_INNER_R = 100
-const INNER_R = 95
-const INNER_INNER_R = 48
-const SIZE = 360
+const OUTER_R = 200
+const OUTER_INNER_R = 134
+const INNER_R = 127
+const INNER_INNER_R = 64
+const SIZE = 480
 
 /** Light text for dark wedges. */
 const brightStyle = new TextStyle({
   fill: '#f0f3f7',
-  fontSize: 15,
+  fontSize: 17,
   fontWeight: '600',
   fontFamily: 'system-ui, sans-serif',
 })
@@ -29,21 +29,21 @@ const brightStyle = new TextStyle({
 /** Dark text for bright mint/gold selected wedges (readable on accent fills). */
 const onAccentStyle = new TextStyle({
   fill: '#042f2e',
-  fontSize: 15,
+  fontSize: 17,
   fontWeight: '700',
   fontFamily: 'system-ui, sans-serif',
 })
 
 const onGoldStyle = new TextStyle({
   fill: '#1c1408',
-  fontSize: 15,
+  fontSize: 17,
   fontWeight: '700',
   fontFamily: 'system-ui, sans-serif',
 })
 
 const mutedStyle = new TextStyle({
   fill: '#a8b2c1',
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: '500',
   fontFamily: 'system-ui, sans-serif',
 })
@@ -244,13 +244,13 @@ export function CircleOfFifths() {
 
       const hubMode = new Text({ text: 'Maj', style: brightStyle })
       hubMode.anchor.set(0.5)
-      hubMode.y = -8
+      hubMode.y = -12
       root.addChild(hubMode)
       hubModeRef.current = hubMode
 
       const hubKey = new Text({ text: 'C', style: mutedStyle })
       hubKey.anchor.set(0.5)
-      hubKey.y = 10
+      hubKey.y = 14
       root.addChild(hubKey)
       hubKeyRef.current = hubKey
 

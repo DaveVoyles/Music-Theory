@@ -6,7 +6,8 @@ export interface SynthLike {
   triggerAttackRelease: (
     note: string | string[],
     duration: string | number,
-    time?: number,
+    /** Absolute seconds or Tone relative time (e.g. '+0.28'). */
+    time?: number | string,
     velocity?: number,
   ) => void
   dispose?: () => void
@@ -25,12 +26,35 @@ export interface TheoryAudio {
   prime: () => Promise<void>
   /** Play a single pitch class (default octave 4 for mid-neck feel). */
   playPitch: (pc: PitchClass, octave?: number) => Promise<void>
+  /** Play an absolute MIDI note (guitar frets map here for realistic register). */
+  playMidi: (midi: number) => Promise<void>
   /** Play tonic triad for the given key/mode/minor form. */
   playTriad: (key: KeyRef) => Promise<void>
   /** Play the triad built on a scale degree (I–vii°) in the key. */
   playDegreeTriad: (key: KeyRef, degree: Degree) => Promise<void>
+  /**
+   * Play two pitch classes as an ascending interval (low then high, then both).
+   * Uses the same octave band; raises the upper note if it would sound below.
+   */
+  playInterval: (from: PitchClass, to: PitchClass, octave?: number) => Promise<void>
+  /**
+   * Play a sequence of scale-degree triads (progression).
+   * `gapSec` is the delay between chord attacks.
+   */
+  playProgression: (
+    key: KeyRef,
+    degrees: readonly Degree[],
+    gapSec?: number,
+  ) => Promise<void>
   /** True after a successful prime. */
   isPrimed: () => boolean
+}
+
+/** MIDI → scientific pitch (C4 = 60). */
+export function midiToNoteName(midi: number): string {
+  const pc = ((midi % 12) + 12) % 12
+  const octave = Math.floor(midi / 12) - 1
+  return pcToNoteName(pc as PitchClass, octave)
 }
 
 const NOTE_NAMES_SHARP = [
@@ -134,6 +158,12 @@ export function createTheoryAudio(options: CreateTheoryAudioOptions = {}): Theor
       s.triggerAttackRelease(pcToNoteName(pc, octave), '8n')
     },
 
+    async playMidi(midi) {
+      await this.prime()
+      const s = await ensureSynth()
+      s.triggerAttackRelease(midiToNoteName(midi), '8n')
+    },
+
     async playTriad(key) {
       await this.prime()
       const s = await ensureSynth()
@@ -144,6 +174,27 @@ export function createTheoryAudio(options: CreateTheoryAudioOptions = {}): Theor
       await this.prime()
       const s = await ensureSynth()
       s.triggerAttackRelease(degreeTriadNoteNames(key, degree), '4n')
+    },
+
+    async playInterval(from, to, octave = 4) {
+      await this.prime()
+      const s = await ensureSynth()
+      const low = pcToNoteName(from, octave)
+      const highOct = to < from ? octave + 1 : octave
+      const high = pcToNoteName(to, highOct)
+      // Sequential then harmonic — Tone relative times keep them apart.
+      s.triggerAttackRelease(low, '8n')
+      s.triggerAttackRelease(high, '8n', '+0.28')
+      s.triggerAttackRelease([low, high], '4n', '+0.55')
+    },
+
+    async playProgression(key, degrees, gapSec = 0.55) {
+      await this.prime()
+      const s = await ensureSynth()
+      degrees.forEach((degree, i) => {
+        const t = i === 0 ? undefined : `+${(gapSec * i).toFixed(3)}`
+        s.triggerAttackRelease(degreeTriadNoteNames(key, degree), '4n', t)
+      })
     },
   }
 }

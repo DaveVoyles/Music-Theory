@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildNeck, OPEN_STRING_PCS, pitchAt } from './neck'
+import { buildNeck, midiAt, octaveAt, OPEN_STRING_PCS, pitchAt } from './neck'
 import type { KeyRef } from '../theory'
 
 const C_MAJOR: KeyRef = { tonic: 0, mode: 'major', tonicSpelling: 'C' }
@@ -11,6 +11,16 @@ describe('pitchAt', () => {
     expect(pitchAt(0, 0)).toBe(4)
     expect(pitchAt(0, 1)).toBe(5) // F
     expect(pitchAt(1, 0)).toBe(9) // A
+  })
+})
+
+describe('midiAt / octaveAt', () => {
+  it('maps standard tuning open strings to concert MIDI', () => {
+    expect(midiAt(0, 0)).toBe(40) // E2
+    expect(midiAt(5, 0)).toBe(64) // E4
+    expect(midiAt(0, 12)).toBe(52) // E3 at 12th fret low E
+    expect(octaveAt(0, 0)).toBe(2)
+    expect(octaveAt(5, 0)).toBe(4)
   })
 })
 
@@ -67,5 +77,19 @@ describe('buildNeck', () => {
     expect(bFocused.isChordTone).toBe(false)
     const c = iOnly.find((c) => c.stringIndex === 1 && c.fret === 3)!
     expect(c.isChordTone).toBe(true)
+  })
+
+  it('assigns scale degrees 1–7 for diatonic notes', () => {
+    const cells = buildNeck(C_MAJOR)
+    const c = cells.find((x) => x.stringIndex === 1 && x.fret === 3)! // C
+    const d = cells.find((x) => x.stringIndex === 1 && x.fret === 5)! // D
+    const e = cells.find((x) => x.stringIndex === 0 && x.fret === 0)! // E
+    const g = cells.find((x) => x.stringIndex === 0 && x.fret === 3)! // G
+    expect(c.scaleDegree).toBe(1)
+    expect(d.scaleDegree).toBe(2)
+    expect(e.scaleDegree).toBe(3)
+    expect(g.scaleDegree).toBe(5)
+    const fs = cells.find((x) => x.stringIndex === 0 && x.fret === 2)! // F#
+    expect(fs.scaleDegree).toBeNull()
   })
 })

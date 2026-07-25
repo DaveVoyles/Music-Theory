@@ -5,8 +5,10 @@ import { CircleOfFifths } from './components/CircleOfFifths'
 import { FeatureHeading, HelpTip } from './components/HelpTip'
 import { Fretboard } from './components/Fretboard'
 import { DegreeLesson } from './components/DegreeLesson'
+import { IntervalLesson } from './components/IntervalLesson'
 import { KeyLesson } from './components/KeyLesson'
 import { MinorFormControl } from './components/MinorFormControl'
+import { ProgressionPanel } from './components/ProgressionPanel'
 import { QuizPanel } from './components/QuizPanel'
 import { RomanStrip } from './components/RomanStrip'
 import { useTheoryStore } from './store'
@@ -16,8 +18,9 @@ import { useTheoryStore } from './store'
  * Each major region exposes hover/focus help via HelpTip / FeatureHeading.
  */
 function App() {
-  const [analyzerOpen, setAnalyzerOpen] = useState(true)
-  const [quizOpen, setQuizOpen] = useState(true)
+  // Collapsed by default so the fretboard owns the viewport.
+  const [analyzerOpen, setAnalyzerOpen] = useState(false)
+  const [quizOpen, setQuizOpen] = useState(false)
   const keySpelling = useTheoryStore((s) => s.keySpelling)
   const mode = useTheoryStore((s) => s.mode)
   const minorForm = useTheoryStore((s) => s.minorForm)
@@ -40,8 +43,8 @@ function App() {
           </h1>
           <p className="app-subtitle">
             Hover the <span className="help-inline-hint">?</span> icons for what each
-            feature does · click the circle or a song section to set the key · click
-            frets to hear notes
+            feature does · click the circle or frets for keys &amp; intervals · quiz
+            includes ear training
           </p>
         </div>
         <div className="app-key-badge-wrap">
@@ -88,6 +91,7 @@ function App() {
               <RomanStrip />
             </div>
             <DegreeLesson />
+            <ProgressionPanel />
           </div>
         </aside>
 
@@ -95,11 +99,12 @@ function App() {
           <div className="panel-header">
             <FeatureHeading
               feature="fretboard"
-              meta="EADGBE · frets 0–12 · Low E/A/D emphasized"
+              meta="Gold = root · green = in key · dark = outside"
             />
           </div>
           <div className="panel-body fretboard-pane">
             <Fretboard />
+            <IntervalLesson />
           </div>
           <section
             className={`panel-quiz ${quizOpen ? 'is-open' : 'is-collapsed'}`}
@@ -108,7 +113,7 @@ function App() {
             <div className="panel-header quiz-panel-header">
               <FeatureHeading
                 feature="quiz"
-                meta="Key signatures · degree functions · active recall"
+                meta="Signatures · degrees · ear training"
               />
               <button
                 type="button"

@@ -12,6 +12,7 @@ export type QuizKind =
   | 'signature-accidentals'
   | 'degree-function'
   | 'degree-chord'
+  | 'ear-degree'
 
 export interface QuizQuestion {
   kind: QuizKind
@@ -26,6 +27,11 @@ export interface QuizQuestion {
     keySpelling: NoteSpelling
     mode: Mode
     degree?: Degree
+  }
+  /** When set, QuizPanel plays this degree triad (ear training). */
+  hear?: {
+    key: KeyRef
+    degree: Degree
   }
 }
 
@@ -215,11 +221,48 @@ export function makeDegreeChordQuestion(rng: Rng = Math.random): QuizQuestion {
   }
 }
 
+const EAR_DEGREES = [1, 2, 4, 5, 6] as const satisfies readonly Degree[]
+
+/**
+ * Ear training: hear a degree triad in a major key, pick the roman numeral.
+ * Prompt does not name the degree — use `hear` + Replay in the UI.
+ */
+export function makeEarDegreeQuestion(rng: Rng = Math.random): QuizQuestion {
+  const key = pick(QUIZ_MAJOR_KEYS, rng)
+  const degree = pick(EAR_DEGREES, rng)
+  const info = degreeLessonInfo(key, degree)
+  const correct = info.roman
+  const distractors = EAR_DEGREES.map(
+    (d) => degreeLessonInfo(key, d).roman,
+  )
+  // Pad with iii / vii° so uniqueChoices always has enough distinct romans
+  const extra = [3, 7].map((d) => degreeLessonInfo(key, d as Degree).roman)
+  const { choices, correctIndex } = uniqueChoices(
+    correct,
+    [...distractors, ...extra],
+    rng,
+  )
+  return {
+    kind: 'ear-degree',
+    prompt: `Listen to the triad in ${info.keyLabel}, then pick which scale degree it is.`,
+    choices,
+    correctIndex,
+    explain: `${info.summary} ${info.why}`,
+    explore: {
+      keySpelling: key.tonicSpelling!,
+      mode: 'major',
+      degree,
+    },
+    hear: { key, degree },
+  }
+}
+
 const MAKERS: readonly ((rng: Rng) => QuizQuestion)[] = [
   makeSignatureCountQuestion,
   makeSignatureAccidentalsQuestion,
   makeDegreeFunctionQuestion,
   makeDegreeChordQuestion,
+  makeEarDegreeQuestion,
 ]
 
 /** Next random question (evenly mixed kinds). */

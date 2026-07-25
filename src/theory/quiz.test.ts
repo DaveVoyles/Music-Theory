@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   makeDegreeChordQuestion,
   makeDegreeFunctionQuestion,
+  makeEarDegreeQuestion,
   makeSignatureAccidentalsQuestion,
   makeSignatureCountQuestion,
   mulberry32,
@@ -41,6 +42,18 @@ describe('quiz generators', () => {
   it('degree-chord: chord tones use en-dash', () => {
     const q = makeDegreeChordQuestion(mulberry32(3))
     expect(q.choices[q.correctIndex]).toMatch(/–/)
+  })
+
+  it('ear-degree: includes hear payload and roman choices', () => {
+    const q = makeEarDegreeQuestion(mulberry32(11))
+    expect(q.kind).toBe('ear-degree')
+    expect(q.hear).toBeDefined()
+    expect(q.hear!.degree).toBeGreaterThanOrEqual(1)
+    expect(q.hear!.degree).toBeLessThanOrEqual(7)
+    expect(q.choices).toHaveLength(4)
+    expect(q.prompt).toMatch(/Listen/)
+    // Correct answer is a roman that matches the secret degree
+    expect(q.choices[q.correctIndex]).toBeTruthy()
   })
 
   it('nextQuizQuestion is deterministic with seed', () => {

@@ -1,4 +1,5 @@
 import { HelpTip } from './HelpTip'
+import { StaffSignature } from './StaffSignature'
 import { keySignatureInfo } from '../theory'
 import { useTheoryStore } from '../store'
 
@@ -34,16 +35,23 @@ export function KeyLesson() {
         <p className="key-lesson-summary">{info.summary}</p>
       </header>
 
-      <div className={`key-lesson-pills ${accidentalClass}`}>
-        {info.count === 0 ? (
-          <span className="key-lesson-pill key-lesson-pill--empty">♮ natural</span>
-        ) : (
-          info.accidentals.map((acc) => (
-            <span key={acc} className="key-lesson-pill">
-              {acc}
-            </span>
-          ))
-        )}
+      <div className="key-lesson-sig-row">
+        <StaffSignature
+          kind={info.kind}
+          accidentals={info.accidentals}
+          label={`${info.keyLabel} key signature on treble staff`}
+        />
+        <div className={`key-lesson-pills ${accidentalClass}`}>
+          {info.count === 0 ? (
+            <span className="key-lesson-pill key-lesson-pill--empty">♮ natural</span>
+          ) : (
+            info.accidentals.map((acc) => (
+              <span key={acc} className="key-lesson-pill">
+                {acc}
+              </span>
+            ))
+          )}
+        </div>
       </div>
 
       <div className="key-lesson-scale" aria-label="Scale notes">

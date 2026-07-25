@@ -1,11 +1,12 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HelpTip } from './HelpTip'
+import { theoryAudio } from '../audio'
 import { nextQuizQuestion, type QuizQuestion } from '../theory'
 import { parseSpelling, type Degree } from '../theory'
 import { useTheoryStore } from '../store'
 
 /**
- * Active recall drills: key signatures + degree functions.
+ * Active recall drills: key signatures, degree functions, and ear training.
  * Optional “Show on workspace” jumps CoF/neck/lesson to the answer key.
  */
 export function QuizPanel() {
@@ -18,6 +19,25 @@ export function QuizPanel() {
 
   const answered = picked !== null
   const correct = answered && picked === question.correctIndex
+  const isEar = question.kind === 'ear-degree' && question.hear
+
+  const hearQuestion = useCallback(() => {
+    const h = question.hear
+    if (!h) return
+    void theoryAudio.playDegreeTriad(h.key, h.degree)
+  }, [question])
+
+  // Auto-play ear questions when they appear (user gesture not required after first prime;
+  // first click on Replay still primes if needed).
+  useEffect(() => {
+    if (question.kind === 'ear-degree' && question.hear) {
+      // Slight delay so the new prompt paints before sound.
+      const t = window.setTimeout(() => {
+        void theoryAudio.playDegreeTriad(question.hear!.key, question.hear!.degree)
+      }, 120)
+      return () => window.clearTimeout(t)
+    }
+  }, [question])
 
   const next = useCallback(() => {
     setQuestion(nextQuizQuestion())
@@ -64,6 +84,15 @@ export function QuizPanel() {
 
       <p className="quiz-prompt">{question.prompt}</p>
 
+      {isEar ? (
+        <div className="quiz-ear-row">
+          <button type="button" className="quiz-primary" onClick={hearQuestion}>
+            Replay triad
+          </button>
+          <span className="quiz-ear-hint">Listen, then choose the degree</span>
+        </div>
+      ) : null}
+
       <div className="quiz-choices" role="group" aria-label="Answer choices">
         {question.choices.map((choice, i) => {
           let cls = 'quiz-choice'
@@ -99,6 +128,11 @@ export function QuizPanel() {
             {question.explore ? (
               <button type="button" className="quiz-secondary" onClick={explore}>
                 Show on workspace
+              </button>
+            ) : null}
+            {isEar ? (
+              <button type="button" className="quiz-secondary" onClick={hearQuestion}>
+                Hear again
               </button>
             ) : null}
             <button type="button" className="quiz-primary" onClick={next}>

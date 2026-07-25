@@ -5,10 +5,21 @@ import {
   type PersistOptions,
   type StateStorage,
 } from 'zustand/middleware'
-import type { Degree, KeyRef, MinorForm, Mode, NoteSpelling, PitchClass } from '../theory'
+import type {
+  Degree,
+  KeyRef,
+  MinorForm,
+  Mode,
+  NoteSpelling,
+  PitchClass,
+  PitchPick,
+} from '../theory'
 import { parseSpelling } from '../theory'
 
 export const THEORY_STORAGE_KEY = 'music-theory:theory-ui'
+
+/** How note labels are drawn on the fretboard. */
+export type NeckLabelMode = 'notes' | 'degrees'
 
 /** Persisted theory UI state (plan 0001 D3). */
 export interface TheoryUiState {
@@ -20,6 +31,12 @@ export interface TheoryUiState {
   minorForm: MinorForm
   /** Optional roman-numeral focus; null = all diatonic (no filter). */
   focusDegree: Degree | null
+  /** Fretboard labels: note names vs scale-degree numbers (1–7). */
+  neckLabelMode: NeckLabelMode
+  /** First pitch in the interval lesson pair (fret or prior key). */
+  intervalA: PitchPick | null
+  /** Second pitch in the interval lesson pair. */
+  intervalB: PitchPick | null
 }
 
 export interface TheoryUiActions {
@@ -29,6 +46,11 @@ export interface TheoryUiActions {
   setFocusDegree: (degree: Degree | null) => void
   /** Toggle focus: same degree again clears (roman strip UX). */
   toggleFocusDegree: (degree: Degree) => void
+  setNeckLabelMode: (mode: NeckLabelMode) => void
+  toggleNeckLabelMode: () => void
+  /** Record a fret click for the interval lesson (A, then B, then replace B). */
+  pickIntervalNote: (pick: PitchPick) => void
+  clearIntervalPicks: () => void
   /** Apply a full key selection (e.g. CoF click or analyzer section jump). */
   selectKey: (input: {
     key: PitchClass
@@ -48,6 +70,9 @@ export const DEFAULT_THEORY_UI: TheoryUiState = {
   mode: 'major',
   minorForm: 'natural',
   focusDegree: null,
+  neckLabelMode: 'notes',
+  intervalA: null,
+  intervalB: null,
 }
 
 export function toKeyRef(state: TheoryUiState): KeyRef {
@@ -120,6 +145,29 @@ const createInitializer =
       set({ focusDegree: current === degree ? null : degree })
     },
 
+    setNeckLabelMode: (neckLabelMode) => set({ neckLabelMode }),
+
+    toggleNeckLabelMode: () => {
+      const cur = get().neckLabelMode
+      set({ neckLabelMode: cur === 'notes' ? 'degrees' : 'notes' })
+    },
+
+    pickIntervalNote: (pick) => {
+      const { intervalA, intervalB } = get()
+      if (!intervalA) {
+        set({ intervalA: pick, intervalB: null })
+        return
+      }
+      if (!intervalB) {
+        set({ intervalB: pick })
+        return
+      }
+      // Third click: keep A, replace B (compare a fixed root to new targets).
+      set({ intervalB: pick })
+    },
+
+    clearIntervalPicks: () => set({ intervalA: null, intervalB: null }),
+
     selectKey: ({ key, keySpelling, mode, minorForm }) => {
       const prev = get()
       const nextSpelling = resolveSpelling(key, keySpelling)
@@ -129,12 +177,21 @@ const createInitializer =
       // filter never outlives the key it was chosen under.
       const keyChanged =
         prev.key !== key || prev.mode !== mode || prev.keySpelling !== nextSpelling
+      // When the tonic moves, seed the interval lesson with previous → new key.
+      const intervalUpdate =
+        keyChanged && prev.key !== key
+          ? {
+              intervalA: { pc: prev.key, spelling: prev.keySpelling },
+              intervalB: { pc: key, spelling: nextSpelling },
+            }
+          : {}
       set({
         key,
         keySpelling: nextSpelling,
         mode,
         minorForm: nextMinor,
         focusDegree: keyChanged ? null : prev.focusDegree,
+        ...intervalUpdate,
       })
     },
 
@@ -163,7 +220,12 @@ export function createTheoryStore(
       },
     } satisfies StateStorage)
 
-  const persistOptions: PersistOptions<TheoryStore, TheoryUiState> = {
+  type PersistedTheoryUi = Pick<
+    TheoryUiState,
+    'key' | 'keySpelling' | 'mode' | 'minorForm' | 'focusDegree' | 'neckLabelMode'
+  >
+
+  const persistOptions: PersistOptions<TheoryStore, PersistedTheoryUi> = {
     name: THEORY_STORAGE_KEY,
     storage: createJSONStorage(() => baseStorage),
     partialize: (state) => ({
@@ -172,6 +234,8 @@ export function createTheoryStore(
       mode: state.mode,
       minorForm: state.minorForm,
       focusDegree: state.focusDegree,
+      neckLabelMode: state.neckLabelMode,
+      // interval picks are session-only — not persisted
     }),
   }
 

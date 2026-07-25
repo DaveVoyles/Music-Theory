@@ -1,6 +1,6 @@
 # Music Theory
 
-**Interactive practice + teaching workspace for guitarists** — pick a key on the Circle of Fifths, see it on the neck, hear the triads, read *why* the key signature has those sharps or flats, drill with a quiz, and jump keys from song-section demos.
+**Interactive practice + teaching workspace for guitarists.** Pick a key on the Circle of Fifths, see it fill the neck, hear triads and progressions, read *why* a signature has those sharps or flats, measure intervals, drill with a quiz (including ear training), and jump keys from song-section demos.
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Repo** | [github.com/DaveVoyles/Music-Theory](https://github.com/DaveVoyles/Music-Theory) |
 | **Stack** | React · Vite · TypeScript · PixiJS v8 · Zustand · Tone.js |
 | **Host** | Static site on **GitHub Pages** (no backend secrets in the client) |
-| **Status** | Plan 0001 complete; pedagogy layer (lessons + quiz + ear training) live; HTTP song analysis is the intentional next phase |
+| **Tests** | Vitest unit suite (`npm test`) |
 
 ---
 
@@ -25,24 +25,26 @@
 9. [GitHub Pages / deploy](#github-pages--deploy)
 10. [Docs & decisions](#docs--decisions)
 11. [For agents / contributors](#for-agents--contributors)
-12. [Out of scope (v1)](#out-of-scope-v1)
+12. [Out of scope](#out-of-scope)
 13. [Roadmap ideas](#roadmap-ideas)
 
 ---
 
 ## What is this?
 
-Most theory tools either **show a diagram** or **play notes**. This app keeps **one shared theory state** (key, mode, minor form, degree focus) and drives **everything** from it:
+Most theory tools either **show a diagram** or **play notes**. This app keeps **one shared theory state** (key, mode, minor form, degree focus, neck labels, interval picks) and drives **everything** from it:
 
-- **Explore** — click keys and frets; the rest of the workspace follows.
-- **Hear** — tonic triads, degree triads, and single pitches (browser audio after a click).
-- **Learn** — live panels explain key signatures and scale-degree *functions*, not only labels.
-- **Check** — a quiz reuses the same teaching facts for active recall.
-- **Apply** — fixture song sections jump the workspace to real-form keys (mock analyzer today).
+| Mode | What you do |
+|------|-------------|
+| **Explore** | Click keys and frets; the rest of the workspace follows. |
+| **Hear** | Tonic triads, degree triads, fretted pitches in real guitar register, intervals, full progressions. |
+| **Learn** | Live panels for key signatures (with staff sketch), degree *functions*, and intervals. |
+| **Check** | Quiz reuses the same teaching facts — including “which degree did you hear?” |
+| **Apply** | Fixture song sections jump the workspace to real-form keys (mock analyzer today). |
 
-It targets **guitarists** who already know some theory and want a **synced visual + aural** lab: standard EADGBE, frets 0–12, power-string emphasis (Low E / A / D).
+Built for **guitarists** who want a **synced visual + aural** lab: standard **EADGBE**, frets **0–12**, large responsive neck, power-string emphasis (Low E / A / D).
 
-Domain vocabulary lives in [`CONTEXT.md`](CONTEXT.md) (e.g. dual-ring CoF, focus degree, minor form, `SongAnalyzerProvider`).
+Domain vocabulary lives in [`CONTEXT.md`](CONTEXT.md) (dual-ring CoF, focus degree, minor form, `SongAnalyzerProvider`, etc.).
 
 ---
 
@@ -52,12 +54,14 @@ Domain vocabulary lives in [`CONTEXT.md`](CONTEXT.md) (e.g. dual-ring CoF, focus
 
 - **Outer ring** = major keys; **inner ring** = relative minors (same signature, different tonic).
 - Click a wedge → sets global key/mode, highlights the major/minor pair, plays the **tonic triad**.
+- Also seeds the **interval lesson** with previous tonic → new tonic (e.g. C → G = perfect fifth).
 - Clockwise ≈ more sharps; counter-clockwise ≈ more flats.
 
-### Key signature lesson
+### Key signature lesson + staff
 
 Updates whenever the key changes:
 
+- **Treble-staff SVG** with accidentals in engraved order.
 - How many sharps or flats, **which notes** (staff order).
 - Scale with accidentals highlighted.
 - **Why** (fifths from C + scale-pattern intuition).
@@ -68,61 +72,94 @@ Updates whenever the key changes:
 
 - **I–vii°** strip filters the fretboard to that chord’s tones.
 - Selecting a degree **plays the degree triad** and opens a lesson: function family (tonic / subdominant / dominant…), chord tones, why it pulls, try-this progressions.
-- Minor form (natural / harmonic / melodic) changes degrees 6/7, roman qualities, sound, and copy.
+- Minor form (**natural / harmonic / melodic**) changes degrees 6/7, roman qualities, sound, and copy.
+
+### Progression player
+
+Common diatonic progressions in the current key:
+
+| Mode | Examples |
+|------|----------|
+| Major | I–V–vi–IV · I–IV–V–I · ii–V–I · I–vi–IV–V |
+| Minor | i–VI–III–VII · i–iv–V–i · i–VII–VI–VII |
+
+**Play** sounds each triad in order and focuses that degree on the neck so you can see + hear the cadence.
 
 ### Guitar fretboard
 
-- Standard **EADGBE**, frets **0–12**.
-- Diatonic labels; **root in gold**; Low E/A/D drawn stronger for power-chord practice.
-- Click a lit note → pitch; non-diatonic frets stay dim.
+- Standard **EADGBE**, frets **0–12**, **fills the main column** (responsive Pixi canvas).
+- **Color legend**
+  - **Gold** = root (tonic of the selected key)
+  - **Green / teal** = notes in the key (scale tones)
+  - **Dark** = outside the key
+  - **Violet ring** = notes in your interval pick
+- Toggle labels: **Note names** ↔ **Degrees 1–7**.
+- When a roman degree is focused, non-chord tones dim (still in key, not this chord).
+- Low E / A / D drawn thicker for power-chord practice.
+- Click frets → **real guitar register** (open low E = E2 … open high e = E4), not a flat mid-range band.
+- Click two frets → interval lesson.
 
-### Theory quiz
+### Interval lesson
 
-- Multiple choice: signature counts, accidentals, degree names, chord tones.
-- Score + explanation after each answer.
-- **Show on workspace** jumps the Circle, neck, and lessons to that key/degree.
+- Two frets (or two Circle keys) → name (**P5**, **M3**, tritone, …), semitone count, why, try this.
+- **Hear interval** plays low → high → both.
+- Third fret click keeps the first note and replaces the second.
+
+### Theory quiz (including ear training)
+
+Multiple choice mixed from:
+
+- Signature counts and accidentals  
+- Degree function names  
+- Chord tones  
+- **Ear training**: hear a triad → pick the roman (Replay supported)
+
+After each answer: explanation + optional **Show on workspace** (jumps Circle, neck, and lessons).
 
 ### Song analyzer (mock)
 
 - Search fixture songs, open a timeline of sections (chords + romans).
 - Click a section → workspace key/mode jumps; degree focus clears.
-- Architecture is provider-based (`MockProvider` now; `HttpProvider` stub for a future gateway — **no API keys in the SPA**).
+- Provider-based architecture (`MockProvider` now; `HttpProvider` stub for a future gateway — **no API keys in the SPA**).
 
 ### Help tooltips
 
-Hover/focus **?** next to major regions for What / How / Try this copy (`src/help/featureHelp.ts`).
+Hover/focus **?** next to major regions for What / How / Try this (`src/help/featureHelp.ts`).
 
 ### Persistence
 
-Key, mode, minor form, and degree focus restore from **localStorage** after reload.
+Key, mode, minor form, degree focus, and neck label mode restore from **localStorage** after reload. Interval picks are session-only.
 
 ---
 
 ## How it works
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  UI (React + Pixi)                                          │
-│  CoF · KeyLesson · RomanStrip · DegreeLesson · Fretboard    │
-│  Quiz · Analyzer · HelpTip                                  │
-└───────────────────────────┬─────────────────────────────────┘
-                            │ subscribe / dispatch
-                            ▼
-              useTheoryStore (Zustand + localStorage)
-              key · keySpelling · mode · minorForm · focusDegree
-                            │
-          ┌─────────────────┼─────────────────┐
-          ▼                 ▼                 ▼
-     theory/           audio/            analyzer/
-   pure math        Tone (gesture)     Mock | Http DTO
-   lessons/quiz     prime → play
-     cof/ fretboard pure geometry maps
+┌──────────────────────────────────────────────────────────────────┐
+│  UI (React + Pixi)                                               │
+│  CoF · KeyLesson + Staff · RomanStrip · DegreeLesson             │
+│  ProgressionPanel · Fretboard · IntervalLesson · Quiz · Analyzer │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ subscribe / dispatch
+                               ▼
+                 useTheoryStore (Zustand + localStorage)
+     key · spelling · mode · minorForm · focusDegree
+     neckLabelMode · intervalA/B
+                               │
+         ┌─────────────────────┼─────────────────────┐
+         ▼                     ▼                     ▼
+    theory/               audio/                analyzer/
+  pure math            Tone (gesture)         Mock | Http DTO
+  lessons / quiz       prime → play
+  intervals / staff    pitch / MIDI / triads
+  progressions         intervals / progressions
+    cof/  fretboard/   pure geometry maps (+ MIDI frets)
 ```
 
-1. User action (CoF wedge, roman button, analyzer section, quiz “Show on workspace”).
-2. Store updates (`selectKey`, `toggleFocusDegree`, …).
-3. Views re-render from store + pure helpers (`keySignatureInfo`, `buildNeck`, `degreeLessonInfo`, …).
-4. Audio only starts after a **user gesture** (`theoryAudio.prime` inside play paths).
+1. User action (CoF, frets, romans, progression play, analyzer section, quiz).
+2. Store updates (`selectKey`, `toggleFocusDegree`, `pickIntervalNote`, …).
+3. Views re-render from store + pure helpers (`keySignatureInfo`, `buildNeck`, `intervalInfo`, …).
+4. Audio starts only after a **user gesture** (`theoryAudio.prime` inside play paths).
 
 **Rules of the road**
 
@@ -156,35 +193,41 @@ npm run dev          # local Vite server (usually http://localhost:5173)
 
 **Try in the browser**
 
-1. Open the live site or `npm run dev`.
-2. Click **G** on the outer Circle → key badge, neck, and key-signature lesson update (1 sharp: F#).
-3. Tap **V** on the roman strip → hear the dominant triad, neck filters, degree lesson explains.
-4. Expand **Quiz** under the fretboard → answer one; use **Show on workspace**.
-5. Expand **Analyzer** → open a fixture song → click **Chorus** → key jumps.
+1. Open the [live site](https://davevoyles.github.io/Music-Theory/) or `npm run dev`.
+2. Click **G** on the outer Circle → badge, neck, key lesson + staff update (1 sharp: F#); interval panel shows C → G.
+3. Toggle **Degrees 1–7** on the neck; find all the **5**s.
+4. Tap **V** on the roman strip → dominant triad, neck filters, degree lesson.
+5. Under **Progression**, play **I–V–vi–IV** and watch the neck focus each chord.
+6. Click two frets → interval name + **Hear interval**.
+7. Expand **Quiz** → answer one (or an ear item); **Show on workspace**.
+8. Expand **Analyzer** → fixture song → **Chorus** → key jumps.
+
+Quiz and analyzer start **collapsed** so the fretboard owns the viewport.
 
 ---
 
 ## UI map
 
 ```
-┌─ Header ────────────────────────────────────────────────────┐
-│  Music Theory [?]     ·  live key badge (mode / form / focus) │
-├──────────────────────┬──────────────────────────────────────┤
-│  Circle of Fifths    │  Fretboard (EADGBE · frets 0–12)      │
-│  Key signature lesson│  Quiz (collapsible)                  │
-│  Minor form (if min) │                                      │
-│  Degrees I–vii°      │                                      │
-│  Degree function     │                                      │
-├──────────────────────┴──────────────────────────────────────┤
-│  Analyzer (collapsible) · fixture search · section timeline │
-└─────────────────────────────────────────────────────────────┘
+┌─ Header ─────────────────────────────────────────────────────────┐
+│  Music Theory [?]     ·  live key badge (mode / form / focus)     │
+├────────────────────────┬─────────────────────────────────────────┤
+│  Circle of Fifths      │  Fretboard (large · responsive)          │
+│  Key signature + staff │    Note names | Degrees 1–7             │
+│  Minor form (if min)   │    Legend · interval picks               │
+│  Degrees I–vii°        │  Interval lesson                         │
+│  Degree function       │  Quiz (collapsible, starts closed)       │
+│  Progression player    │                                          │
+├────────────────────────┴─────────────────────────────────────────┤
+│  Analyzer (collapsible, starts closed) · fixtures · sections      │
+└───────────────────────────────────────────────────────────────────┘
 ```
 
 | Region | What you get |
 |--------|----------------|
 | **Header** | Title, help, current key / minor form / degree focus |
-| **Left column** | CoF, key-signature teaching, roman strip, degree teaching |
-| **Right column** | Neck map + quiz |
+| **Left column (~30%)** | CoF, key-signature teaching + staff, romans, degree lesson, progressions |
+| **Right column (~70%)** | Large neck, interval lesson, quiz |
 | **Bottom** | Song analyzer (fixtures → section → key jump) |
 
 ---
@@ -208,31 +251,31 @@ Music-Theory/
 └── src/
     ├── main.tsx              ← React entry
     ├── App.tsx / App.css     ← shell layout + chrome styles
-    ├── index.css             ← design tokens (colors, base type scale)
+    ├── index.css             ← design tokens
     ├── theory/               ← pure music-theory + teaching engines
     ├── store/                ← Zustand theory UI store
     ├── cof/                  ← Circle of Fifths pure data
-    ├── fretboard/            ← neck map pure data
+    ├── fretboard/            ← neck map + MIDI frets
     ├── audio/                ← Tone.js wrapper (gesture prime)
     ├── analyzer/             ← providers, fixtures, DTOs
     ├── help/                 ← FEATURE_HELP catalog for tooltips
     └── components/           ← React + Pixi views
 ```
 
-### `src/` packages (what lives where)
+### `src/` packages
 
 | Path | Role | Start here |
 |------|------|------------|
-| [`src/theory/`](src/theory/) | Pitch classes, scales, key-aware spellings, chord tones, romans, **`keySignatureInfo`**, **`degreeLessonInfo`**, **quiz generators** | [`theory/README.md`](src/theory/README.md) |
-| [`src/store/`](src/store/) | `useTheoryStore`: key, spelling, mode, minor form, focus degree; localStorage | [`store/README.md`](src/store/README.md) |
-| [`src/cof/`](src/cof/) | Dual-ring positions, wedge selection, relative pairs (no Pixi) | [`cof/README.md`](src/cof/README.md) |
-| [`src/fretboard/`](src/fretboard/) | `buildNeck` map: diatonic, root, chord-tone focus, power emphasis | [`fretboard/README.md`](src/fretboard/README.md) |
-| [`src/audio/`](src/audio/) | `theoryAudio`: prime, pitch, tonic triad, **degree triad** | [`audio/README.md`](src/audio/README.md) |
-| [`src/analyzer/`](src/analyzer/) | `SongAnalyzerProvider`, Mock + Http stubs, fixtures, types | [`analyzer/README.md`](src/analyzer/README.md) |
+| [`src/theory/`](src/theory/) | Pitch, scales, spellings, signatures, degree lessons, **intervals**, **staff layout**, **progressions**, **quiz** (incl. ear) | [`theory/README.md`](src/theory/README.md) |
+| [`src/store/`](src/store/) | Key/mode/form/focus, neck label mode, interval picks; localStorage | [`store/README.md`](src/store/README.md) |
+| [`src/cof/`](src/cof/) | Dual-ring positions, wedge selection (no Pixi) | [`cof/README.md`](src/cof/README.md) |
+| [`src/fretboard/`](src/fretboard/) | `buildNeck`, scale degrees, **`midiAt` / concert register** | [`fretboard/README.md`](src/fretboard/README.md) |
+| [`src/audio/`](src/audio/) | Pitch, MIDI, triads, intervals, **progressions** | [`audio/README.md`](src/audio/README.md) |
+| [`src/analyzer/`](src/analyzer/) | `SongAnalyzerProvider`, Mock + Http stubs, fixtures | [`analyzer/README.md`](src/analyzer/README.md) |
 | [`src/help/`](src/help/) | Feature help copy for `HelpTip` | [`help/README.md`](src/help/README.md) |
-| [`src/components/`](src/components/) | Shell pieces: CoF, Fretboard, lessons, quiz, analyzer, tips | [`components/README.md`](src/components/README.md) |
+| [`src/components/`](src/components/) | Shell: CoF, Fretboard, lessons, quiz, progression, staff, analyzer | [`components/README.md`](src/components/README.md) |
 
-### Important theory modules
+### Theory modules
 
 | File | Responsibility |
 |------|----------------|
@@ -242,18 +285,24 @@ Music-Theory/
 | `degrees.ts` | Chord tones, roman numerals |
 | `keySignature.ts` | Accidental counts + teaching copy |
 | `degreeLesson.ts` | Function names, roles, why / try this |
-| `quiz.ts` | Multiple-choice generators (seedable RNG for tests) |
+| `intervals.ts` | Semitone → interval name + lesson copy |
+| `staff.ts` | Treble-staff accidental positions for SVG |
+| `progressions.ts` | Common major/minor progression presets |
+| `quiz.ts` | MC generators + ear-degree questions (seedable RNG) |
 
-### Important UI components
+### UI components
 
 | Component | Responsibility |
 |-----------|----------------|
-| `CircleOfFifths.tsx` | Pixi dual-ring; click → store + tonic triad |
-| `Fretboard.tsx` | Pixi neck; click → pitch |
-| `KeyLesson.tsx` | Live key-signature teaching panel |
+| `CircleOfFifths.tsx` | Pixi dual-ring; click → store + tonic triad + interval seed |
+| `Fretboard.tsx` | Large responsive Pixi neck; labels toggle; MIDI pitches; interval picks |
+| `KeyLesson.tsx` | Live key-signature teaching |
+| `StaffSignature.tsx` | Treble-staff SVG for the current signature |
 | `RomanStrip.tsx` | Degree focus + degree-triad audio |
 | `DegreeLesson.tsx` | Function lesson + Hear triad |
-| `QuizPanel.tsx` | Active recall + workspace jump |
+| `ProgressionPanel.tsx` | Preset progressions + play / focus sync |
+| `IntervalLesson.tsx` | Interval name, why, hear interval |
+| `QuizPanel.tsx` | Active recall + ear training + workspace jump |
 | `AnalyzerPanel.tsx` | Fixture search / timeline / section jump |
 | `HelpTip.tsx` | Accessible ? popovers |
 | `MinorFormControl.tsx` | Natural / harmonic / melodic |
@@ -264,8 +313,8 @@ Music-Theory/
 |------|---------|
 | [`docs/design/0001-…`](docs/design/0001-interactive-music-theory-app.md) | Original product plan + deliverables |
 | [`docs/decisions/`](docs/decisions/) | Architecture Decision Records |
-| [`docs/improvements.md`](docs/improvements.md) | Ranked backlog (Http UI, a11y, ear quiz, …) |
-| [`docs/learnings.md`](docs/learnings.md) | What we learned building plan 0001 |
+| [`docs/improvements.md`](docs/improvements.md) | Ranked backlog |
+| [`docs/learnings.md`](docs/learnings.md) | Implementation notes |
 
 ---
 
@@ -276,15 +325,22 @@ Music-Theory/
 1. User clicks a CoF wedge **or** analyzer section **or** quiz “Show on workspace”.
 2. `selectKey({ key, keySpelling, mode, minorForm? })` runs.
 3. On real key/mode change, `focusDegree` is **cleared** so a filter never outlives its key.
-4. CoF re-paints selection; fretboard rebuilds via `buildNeck(toKeyRef(state), focusDegree)`.
-5. Lessons recompute from pure functions over the same `KeyRef`.
+4. When the tonic pitch class changes, **intervalA/B** become previous → new tonic.
+5. CoF re-paints; fretboard rebuilds via `buildNeck(toKeyRef(state), focusDegree)`.
+6. Lessons recompute from pure functions over the same `KeyRef`.
 
 ### Data flow (degree focus)
 
-1. User taps **V** (example) on the roman strip.
-2. `toggleFocusDegree(5)` → store `focusDegree = 5` (re-tap clears).
-3. Fretboard keeps only V chord tones bright.
-4. `DegreeLesson` shows dominant teaching; `playDegreeTriad` fires for ear training.
+1. User taps **V** on the roman strip (or a progression step lands on V).
+2. `toggleFocusDegree` / `setFocusDegree` updates the store.
+3. Fretboard keeps only that chord’s tones bright.
+4. `DegreeLesson` teaches the role; triad audio may fire.
+
+### Data flow (interval pick)
+
+1. Fret click → `pickIntervalNote` (A, then B, then replace B) + `playMidi`.
+2. Or CoF key change seeds A/B from previous/new tonics.
+3. `IntervalLesson` calls `intervalInfo(A, B)` for teaching copy; Hear uses `playInterval`.
 
 ### Import conventions
 
@@ -302,10 +358,10 @@ npm test
 
 | Package | What unit tests cover |
 |---------|------------------------|
-| `theory/` | Scales, spellings, minors, chord tones, signatures, degree lessons, quiz |
-| `store/` | Defaults, setters, persistence, focus clear on key jump |
-| `cof/` / `fretboard/` | Pure geometry / neck maps |
-| `audio/` | Note names, triads, degree triads (Tone mocked) |
+| `theory/` | Scales, spellings, signatures, degree lessons, intervals, staff, progressions, quiz + ear |
+| `store/` | Defaults, setters, interval picks, neck label mode, focus clear on key jump, persistence |
+| `cof/` / `fretboard/` | Geometry / neck maps / MIDI frets |
+| `audio/` | Note names, MIDI, triads, intervals, progressions (Tone mocked) |
 | `analyzer/` | Fixtures + Http URL building (no real network secrets) |
 | `help/` | Feature catalog completeness |
 
@@ -313,13 +369,15 @@ Do **not** rely on real Web Audio or WebGL in CI — inject mocks at package bou
 
 **Manual smoke**
 
-1. Cold load → **C major**, all diatonic.
-2. Rapid CoF major clicks → header + frets update; triad after first gesture.
+1. Cold load → **C major**, large neck, quiz/analyzer collapsed.
+2. CoF major clicks → header + frets + staff; triad after first gesture; interval C→G on G click.
 3. Inner minor → minor-form control; harmonic raises 7 (A minor → G#).
-4. Roman **V** → hear triad + chord-tone focus + lesson; **All** clears.
-5. Quiz → correct/wrong styling readable; Show on workspace jumps key.
-6. Analyzer fixture → section click jumps key and clears degree focus.
-7. Reload → theory UI restored from localStorage.
+4. Degrees toggle + roman **V** → labels / focus / triad / lesson.
+5. Progression play → sequential focus + audio.
+6. Two frets → interval panel; Hear interval.
+7. Quiz ear item → Replay → answer → Show on workspace.
+8. Analyzer fixture → section click jumps key.
+9. Reload → theory UI restored from localStorage.
 
 ---
 
@@ -351,17 +409,15 @@ https://github.com/DaveVoyles/Music-Theory/issues?q=label%3Aplan%3A0001
 
 ## For agents / contributors
 
-This section is the **onboarding brief** for coding agents and humans shipping PRs.
-
 ### How to change things safely
 
 1. **Theory math / teaching facts** → `src/theory/` + matching `*.test.ts` (TDD surface).
 2. **Store shape / persistence** → `src/store/theoryStore.ts` + store tests.
 3. **CoF layout / selection** → pure data in `src/cof/`, paint in `CircleOfFifths.tsx`.
-4. **Neck map** → pure data in `src/fretboard/neck.ts`, paint in `Fretboard.tsx`.
+4. **Neck map** → pure data in `src/fretboard/neck.ts`, paint in `Fretboard.tsx` (resize-aware).
 5. **Audio** → `src/audio/theoryAudio.ts` (injectable Tone for tests).
 6. **Song analysis** → `src/analyzer/` providers; UI is `AnalyzerPanel.tsx`.
-7. **Help copy** → `src/help/featureHelp.ts`.
+7. **Help copy** → `src/help/featureHelp.ts` (and featureHelp tests for new IDs).
 8. **Chrome / layout / contrast** → `App.tsx`, `App.css`, `index.css`.
 
 Prefer **extending pure modules** over growing imperative Pixi files. Keep Pixi components as thin renderers over pure maps.
@@ -376,11 +432,11 @@ Prefer **extending pure modules** over growing imperative Pixi files. Keep Pixi 
 | Analyzer | `SongAnalyzerProvider` interface; UI depends on **DTO**, not chat APIs |
 | Audio | Tone starts only inside a **user gesture** |
 | Spellings | Key-aware ♯/♭ via theory engine |
-| Neck | Standard EADGBE, frets 0–12; emphasize Low E / A / D |
+| Neck | Standard EADGBE, frets 0–12; emphasize Low E / A / D; concert MIDI on click |
 
 ---
 
-## Out of scope (v1)
+## Out of scope
 
 Do not re-open without a written plan / ADR:
 
@@ -394,13 +450,16 @@ Do not re-open without a written plan / ADR:
 
 ## Roadmap ideas
 
-See [`docs/improvements.md`](docs/improvements.md). High-level themes:
+See [`docs/improvements.md`](docs/improvements.md). High-level themes still open:
 
 - Wire **HttpProvider** UI (gateway URL, offline fallback) for real song analysis
-- **Interval lesson** and **ear quiz** (“which degree did you hear?”)
-- Staff notation sketch for signatures
+- **CAGED / box shapes** overlay on the neck
+- **Custom progression builder** beyond presets
 - Accessibility: keyboard alternatives for canvas maps
 - Lazy-load Pixi / Tone for smaller initial JS
+- Compact mobile layout
+
+**Shipped since plan 0001** (see improvements.md for detail): key + degree lessons, quiz + ear training, interval lesson, staff sketch, progression player, degree numbers on neck, realistic fretted octaves, large responsive fretboard.
 
 ---
 
