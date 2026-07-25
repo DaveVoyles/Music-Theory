@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -12,4 +13,8 @@ const base = process.env.VITE_BASE_PATH ?? '/Music-Theory/'
 export default defineConfig({
   plugins: [react()],
   base,
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+  },
 })
