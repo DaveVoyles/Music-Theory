@@ -4,6 +4,7 @@ import { AnalyzerPanel } from './components/AnalyzerPanel'
 import { CircleOfFifths } from './components/CircleOfFifths'
 import { FeatureHeading, HelpTip } from './components/HelpTip'
 import { Fretboard } from './components/Fretboard'
+import { DegreeLesson } from './components/DegreeLesson'
 import { KeyLesson } from './components/KeyLesson'
 import { MinorFormControl } from './components/MinorFormControl'
 import { RomanStrip } from './components/RomanStrip'
@@ -84,6 +85,7 @@ function App() {
               </span>
               <RomanStrip />
             </div>
+            <DegreeLesson />
           </div>
         </aside>
 

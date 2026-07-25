@@ -23,12 +23,13 @@ Ideas ranked for impact vs. effort. Not committed work — pick via a new plan/i
 7. **Compact mobile layout** — plan scoped desktop-first; stack order and touch targets need a deliberate pass.  
 8. **SPA 404.html → index.html** — if deep links/routes are added later (plan-lenses note).
 
-## Teaching / pedagogy (post–key-signature lesson)
+## Teaching / pedagogy
 
 13. **Interval lesson** — when two frets or two CoF keys are in focus, explain the interval name + semitones.  
-14. **Degree function blurbs** — hover I / IV / V with tonic / subdominant / dominant roles and common progressions.  
-15. **Quiz mode** — “How many sharps in E major?” flashcards using `keySignatureInfo`.  
-16. **Staff notation sketch** — optional SVG key signature (sharps/flats on a staff) next to the pill list.
+14. ~~**Degree function blurbs**~~ — shipped: `degreeLessonInfo` + `DegreeLesson` under the roman strip.  
+15. **Quiz mode** — “How many sharps in E major?” / “What degree is the dominant?” flashcards using lesson engines.  
+16. **Staff notation sketch** — optional SVG key signature (sharps/flats on a staff) next to the pill list.  
+17. **Play degree triad on select** — audio for focused roman (ties teaching to ear).
 
 ## Engineering hygiene
 

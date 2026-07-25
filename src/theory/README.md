@@ -12,9 +12,11 @@ UI-free TypeScript music theory. **Primary TDD surface** for plan 0001 D2.
 | `spellings.ts` | Key-aware diatonic spellings, relative major/minor, `spellPitchClass` |
 | `degrees.ts` | Degree → chord tones, roman numerals, helpers |
 | `keySignature.ts` | Sharps/flats count, order, teaching copy (`keySignatureInfo`) |
+| `degreeLesson.ts` | Degree function names, roles, chord tones, why/try (`degreeLessonInfo`) |
 | `index.ts` | Public barrel — import from here |
 | `theory.test.ts` | Unit tests (C major, sharp/flat keys, minor 6/7, triads) |
 | `keySignature.test.ts` | Signature counts + pedagogical payloads |
+| `degreeLesson.test.ts` | Degree function lesson payloads |
 
 ## Usage
 

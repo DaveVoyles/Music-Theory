@@ -9,6 +9,7 @@ describe('FEATURE_HELP catalog', () => {
       'keyLesson',
       'circleOfFifths',
       'romanStrip',
+      'degreeLesson',
       'minorForm',
       'fretboard',
       'analyzer',

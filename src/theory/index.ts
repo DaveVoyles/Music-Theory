@@ -61,3 +61,10 @@ export {
   type KeySignatureInfo,
   type SignatureKind,
 } from './keySignature'
+
+export {
+  degreeLessonInfo,
+  degreeLessonOverview,
+  type DegreeLessonInfo,
+  type HarmonicFunction,
+} from './degreeLesson'
