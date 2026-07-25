@@ -27,11 +27,17 @@ export const FEATURE_HELP = {
     how: 'Set by the Circle of Fifths or Analyzer sections. Persists in this browser via localStorage.',
     tryThis: 'Switch keys a few times, reload the page — your last key should come back.',
   },
+  keyLesson: {
+    title: 'Key signature lesson',
+    what: 'How many sharps or flats the current key uses, which notes they are, and why — tied to the Circle of Fifths.',
+    how: 'Updates live when you change key. Shows the accidental list in staff order, the scale with accidentals highlighted, a short “why” (fifths from C), a mnemonic for the order of sharps/flats, and the relative major/minor pair that share this signature.',
+    tryThis: 'Click C (0 accidentals), then G (1 sharp: F#), then D (2 sharps), then F (1 flat: Bb). Watch the count climb as you walk the circle.',
+  },
   circleOfFifths: {
     title: 'Circle of Fifths',
-    what: 'A map of keys arranged by fifths. Neighbors share almost all notes; opposites are farthest away.',
-    how: 'Outer ring = major keys. Inner ring = relative minors (same key signature, different tonic). Click a wedge to set the global key; the matching major/minor pair stays highlighted. Click also plays the tonic triad.',
-    tryThis: 'Click C (outer), then Am (inner on the same spoke) — relative pair, different mode.',
+    what: 'A map of keys arranged by fifths. Neighbors share almost all notes; opposites are farthest away. Clockwise adds sharps; counter-clockwise adds flats.',
+    how: 'Outer ring = major keys. Inner ring = relative minors (same key signature, different tonic). Click a wedge to set the global key; the matching major/minor pair stays highlighted. Click also plays the tonic triad. Read the Key signature lesson below for the accidental count and why.',
+    tryThis: 'Click C (outer), then walk clockwise G → D → A and count sharps in the lesson panel (1, 2, 3).',
   },
   romanStrip: {
     title: 'Roman-numeral degrees',

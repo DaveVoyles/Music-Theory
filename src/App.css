@@ -414,6 +414,143 @@
   opacity: 0.85;
 }
 
+/* —— Key signature lesson (teaching panel under CoF) —— */
+.key-lesson {
+  border-top: 1px solid var(--border);
+  padding: 0.65rem 0.85rem 0.75rem;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    transparent 60%
+  );
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.key-lesson-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.key-lesson-title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.key-lesson-summary {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.key-lesson-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.key-lesson-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.key-lesson-pills--sharp .key-lesson-pill {
+  border-color: rgba(120, 190, 255, 0.45);
+  color: #9ecfff;
+  background: rgba(80, 140, 220, 0.12);
+}
+
+.key-lesson-pills--flat .key-lesson-pill {
+  border-color: rgba(200, 160, 255, 0.45);
+  color: #d4b8ff;
+  background: rgba(140, 100, 220, 0.12);
+}
+
+.key-lesson-pill--empty {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.key-lesson-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.key-lesson-note {
+  min-width: 1.6rem;
+  text-align: center;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.key-lesson-note.is-accidental {
+  color: var(--accent);
+  font-weight: 700;
+  background: rgba(100, 180, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(100, 180, 255, 0.25);
+}
+
+.key-lesson-facts {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.key-lesson-facts > div {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.4rem 0.55rem;
+  align-items: start;
+}
+
+.key-lesson-facts dt {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding-top: 0.1rem;
+}
+
+.key-lesson-facts dd {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.key-lesson-pair-hint {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
 .roman-slot {
   display: flex;
   flex-direction: column;

@@ -11,8 +11,10 @@ UI-free TypeScript music theory. **Primary TDD surface** for plan 0001 D2.
 | `scales.ts` | Scale intervals (major + natural/harmonic/melodic minor), diatonic sets |
 | `spellings.ts` | Key-aware diatonic spellings, relative major/minor, `spellPitchClass` |
 | `degrees.ts` | Degree → chord tones, roman numerals, helpers |
+| `keySignature.ts` | Sharps/flats count, order, teaching copy (`keySignatureInfo`) |
 | `index.ts` | Public barrel — import from here |
 | `theory.test.ts` | Unit tests (C major, sharp/flat keys, minor 6/7, triads) |
+| `keySignature.test.ts` | Signature counts + pedagogical payloads |
 
 ## Usage
 

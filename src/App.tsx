@@ -4,6 +4,7 @@ import { AnalyzerPanel } from './components/AnalyzerPanel'
 import { CircleOfFifths } from './components/CircleOfFifths'
 import { FeatureHeading, HelpTip } from './components/HelpTip'
 import { Fretboard } from './components/Fretboard'
+import { KeyLesson } from './components/KeyLesson'
 import { MinorFormControl } from './components/MinorFormControl'
 import { RomanStrip } from './components/RomanStrip'
 import { useTheoryStore } from './store'
@@ -60,6 +61,7 @@ function App() {
           <div className="panel-body cof-pane">
             <CircleOfFifths />
           </div>
+          <KeyLesson />
           <div className="panel-footer roman-slot">
             <p className="control-hint">
               {mode === 'minor'

@@ -6,6 +6,7 @@ describe('FEATURE_HELP catalog', () => {
     for (const id of [
       'app',
       'keyBadge',
+      'keyLesson',
       'circleOfFifths',
       'romanStrip',
       'minorForm',
