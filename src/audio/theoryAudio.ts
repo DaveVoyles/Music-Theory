@@ -1,4 +1,4 @@
-import type { KeyRef, PitchClass } from '../theory'
+import type { Degree, KeyRef, PitchClass } from '../theory'
 import { chordTonePitchClasses } from '../theory'
 
 /** Minimal synth surface so tests can inject a mock without loading Tone. */
@@ -27,6 +27,8 @@ export interface TheoryAudio {
   playPitch: (pc: PitchClass, octave?: number) => Promise<void>
   /** Play tonic triad for the given key/mode/minor form. */
   playTriad: (key: KeyRef) => Promise<void>
+  /** Play the triad built on a scale degree (I–vii°) in the key. */
+  playDegreeTriad: (key: KeyRef, degree: Degree) => Promise<void>
   /** True after a successful prime. */
   isPrimed: () => boolean
 }
@@ -51,20 +53,27 @@ export function pcToNoteName(pc: PitchClass, octave = 4): string {
   return `${NOTE_NAMES_SHARP[pc]}${octave}`
 }
 
-/** Chord-tone note names for a tonic triad (root-position voicing). */
-export function triadNoteNames(key: KeyRef, octave = 4): string[] {
-  const [r, third, fifth] = chordTonePitchClasses(key, 1)
-  // Keep a compact voicing: root, third, fifth in same octave band
+/**
+ * Compact root-position voicing for any scale-degree triad.
+ * Raises third/fifth an octave when they wrap below the root pitch class.
+ */
+export function degreeTriadNoteNames(
+  key: KeyRef,
+  degree: Degree,
+  octave = 4,
+): string[] {
+  const [r, third, fifth] = chordTonePitchClasses(key, degree)
   const root = pcToNoteName(r, octave)
   let thirdOct = octave
   let fifthOct = octave
   if (third < r) thirdOct = octave + 1
   if (fifth < r) fifthOct = octave + 1
-  // If third went up and fifth is still below third in pitch order...
-  if (fifth < third && fifthOct === thirdOct) {
-    // fine for many shapes
-  }
   return [root, pcToNoteName(third, thirdOct), pcToNoteName(fifth, fifthOct)]
+}
+
+/** Chord-tone note names for a tonic triad (root-position voicing). */
+export function triadNoteNames(key: KeyRef, octave = 4): string[] {
+  return degreeTriadNoteNames(key, 1, octave)
 }
 
 export interface CreateTheoryAudioOptions {
@@ -129,6 +138,12 @@ export function createTheoryAudio(options: CreateTheoryAudioOptions = {}): Theor
       await this.prime()
       const s = await ensureSynth()
       s.triggerAttackRelease(triadNoteNames(key), '4n')
+    },
+
+    async playDegreeTriad(key, degree) {
+      await this.prime()
+      const s = await ensureSynth()
+      s.triggerAttackRelease(degreeTriadNoteNames(key, degree), '4n')
     },
   }
 }

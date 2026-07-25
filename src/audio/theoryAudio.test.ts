@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   createTheoryAudio,
+  degreeTriadNoteNames,
   pcToNoteName,
   triadNoteNames,
   type SynthLike,
@@ -44,6 +45,11 @@ describe('pcToNoteName / triadNoteNames', () => {
   it('builds A harmonic minor tonic triad A-C-E', () => {
     expect(triadNoteNames(A_HARM)).toEqual(['A4', 'C5', 'E5'])
   })
+
+  it('builds degree triads (V in C = G-B-D)', () => {
+    expect(degreeTriadNoteNames(C_MAJOR, 5)).toEqual(['G4', 'B4', 'D5'])
+    expect(degreeTriadNoteNames(C_MAJOR, 2)).toEqual(['D4', 'F4', 'A4'])
+  })
 })
 
 describe('createTheoryAudio', () => {
@@ -82,5 +88,22 @@ describe('createTheoryAudio', () => {
     })
     await audio.playTriad(C_MAJOR)
     expect(trigger).toHaveBeenCalledWith(['C4', 'E4', 'G4'], '4n')
+  })
+
+  it('plays a non-tonic degree triad', async () => {
+    mockToneState.state = 'running'
+    const trigger = vi.fn()
+    const synth: SynthLike = {
+      triggerAttackRelease: trigger,
+      toDestination() {
+        return this
+      },
+    }
+    const audio = createTheoryAudio({
+      loadTone: async () => mockTone(synth),
+      synth,
+    })
+    await audio.playDegreeTriad(C_MAJOR, 5)
+    expect(trigger).toHaveBeenCalledWith(['G4', 'B4', 'D5'], '4n')
   })
 })

@@ -14,6 +14,7 @@ Presentational + interactive UI. Prefer reading/writing `useTheoryStore` over de
 | `HelpTip.tsx` | Accessible “?” popovers (What / How / Try this) from `help/featureHelp` |
 | `KeyLesson.tsx` | Live key-signature lesson (count, accidentals, why, mnemonic) |
 | `DegreeLesson.tsx` | Live degree-function lesson (role, triad, why, try this) |
+| `QuizPanel.tsx` | Active-recall quiz; “Show on workspace” jumps store |
 
 ## Conventions
 

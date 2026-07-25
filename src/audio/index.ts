@@ -1,5 +1,6 @@
 export {
   createTheoryAudio,
+  degreeTriadNoteNames,
   pcToNoteName,
   theoryAudio,
   triadNoteNames,
