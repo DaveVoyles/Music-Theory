@@ -29,6 +29,33 @@
   font-weight: 650;
   letter-spacing: 0.02em;
   color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.help-inline-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.app-key-badge-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.app-key-badge-wrap .app-key-badge {
+  margin: 0;
 }
 
 .app-subtitle {
@@ -38,7 +65,7 @@
 }
 
 .app-key-badge {
-  margin: 0 0 0 auto;
+  margin: 0;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   border: 1px solid var(--border-strong);
@@ -141,7 +168,8 @@
   border-bottom: 1px solid var(--border);
 }
 
-.panel-header h2 {
+.panel-header h2,
+.feature-heading-title {
   margin: 0;
   font-size: 0.8rem;
   font-weight: 600;
@@ -150,8 +178,158 @@
   color: var(--accent);
 }
 
+.feature-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.feature-heading-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+
+.feature-heading-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .panel-meta {
   font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* —— Feature help tooltips —— */
+.help-tip {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.help-tip-trigger {
+  appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.help-tip--compact .help-tip-trigger {
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.65rem;
+}
+
+.help-tip-trigger:hover,
+.help-tip.is-open .help-tip-trigger {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg));
+}
+
+.help-tip-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.help-tip-popover {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  width: min(22rem, 70vw);
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-raised);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+/* Keep open while moving into the popover area from the right edge of headers */
+.panel-header .help-tip-popover,
+.analyzer-header .help-tip-popover {
+  left: 0;
+}
+
+.app-header .help-tip-popover,
+.app-key-badge-wrap .help-tip-popover {
+  left: auto;
+  right: 0;
+}
+
+.help-tip-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.help-tip-block {
+  margin: 0 0 0.45rem;
+  color: var(--text-muted);
+}
+
+.help-tip-block:last-child {
+  margin-bottom: 0;
+}
+
+.help-tip-kicker {
+  display: block;
+  margin-bottom: 0.12rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text);
+}
+
+.control-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.control-row-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.analyzer-col-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
 }
 
