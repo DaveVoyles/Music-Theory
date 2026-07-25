@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { CircleOfFifths } from './components/CircleOfFifths'
+import { Fretboard } from './components/Fretboard'
 import { useTheoryStore } from './store'
 
 /**
@@ -39,8 +40,8 @@ function App() {
             <h2>Fretboard</h2>
             <span className="panel-meta">EADGBE · frets 0–12</span>
           </div>
-          <div className="panel-body empty-pane">
-            <p className="empty-copy">Guitar neck map will render here (Pixi).</p>
+          <div className="panel-body fretboard-pane">
+            <Fretboard />
           </div>
         </main>
       </div>
