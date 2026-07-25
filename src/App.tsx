@@ -14,14 +14,28 @@ function App() {
   const [analyzerOpen, setAnalyzerOpen] = useState(true)
   const keySpelling = useTheoryStore((s) => s.keySpelling)
   const mode = useTheoryStore((s) => s.mode)
+  const minorForm = useTheoryStore((s) => s.minorForm)
+  const focusDegree = useTheoryStore((s) => s.focusDegree)
+
+  const keyLabel =
+    mode === 'minor'
+      ? `${keySpelling} ${mode} (${minorForm})`
+      : `${keySpelling} ${mode}`
+  const focusLabel =
+    focusDegree === null ? 'all diatonic' : `degree ${focusDegree} focus`
 
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1 className="app-title">Music Theory</h1>
-        <p className="app-subtitle">Circle of Fifths · Fretboard · Analyzer</p>
+        <div className="app-header-text">
+          <h1 className="app-title">Music Theory</h1>
+          <p className="app-subtitle">
+            Click the circle or a song section to set the key · click frets to hear notes
+          </p>
+        </div>
         <p className="app-key-badge" aria-live="polite">
-          {keySpelling} {mode}
+          {keyLabel}
+          <span className="app-key-badge-sub">{focusLabel}</span>
         </p>
       </header>
 
@@ -29,11 +43,17 @@ function App() {
         <aside className="panel panel-cof" aria-label="Circle of Fifths">
           <div className="panel-header">
             <h2>Circle of Fifths</h2>
+            <span className="panel-meta">Outer major · inner minor</span>
           </div>
           <div className="panel-body cof-pane">
             <CircleOfFifths />
           </div>
           <div className="panel-footer roman-slot">
+            <p className="control-hint">
+              {mode === 'minor'
+                ? 'Minor form changes scale degrees 6/7 on the neck.'
+                : 'Select a degree to spotlight chord tones on the neck.'}
+            </p>
             <MinorFormControl />
             <RomanStrip />
           </div>
@@ -42,7 +62,7 @@ function App() {
         <main className="panel panel-fretboard" aria-label="Fretboard">
           <div className="panel-header">
             <h2>Fretboard</h2>
-            <span className="panel-meta">EADGBE · frets 0–12</span>
+            <span className="panel-meta">EADGBE · frets 0–12 · Low E/A/D emphasized</span>
           </div>
           <div className="panel-body fretboard-pane">
             <Fretboard />
@@ -55,7 +75,12 @@ function App() {
         aria-label="Song analyzer"
       >
         <div className="panel-header analyzer-header">
-          <h2>Analyzer</h2>
+          <div>
+            <h2>Analyzer</h2>
+            <p className="panel-meta analyzer-hint">
+              Fixture songs only in v1 — section click jumps the whole workspace key
+            </p>
+          </div>
           <button
             type="button"
             className="collapse-btn"
@@ -69,7 +94,11 @@ function App() {
           <div className="panel-body analyzer-body">
             <AnalyzerPanel />
           </div>
-        ) : null}
+        ) : (
+          <p className="analyzer-collapsed-copy">
+            Analyzer collapsed — expand to search fixture songs and jump keys by section.
+          </p>
+        )}
       </section>
     </div>
   )
