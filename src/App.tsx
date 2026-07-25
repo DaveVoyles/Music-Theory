@@ -1,18 +1,24 @@
 import { useState } from 'react'
 import './App.css'
+import { CircleOfFifths } from './components/CircleOfFifths'
+import { useTheoryStore } from './store'
 
 /**
  * Desktop-first shell: CoF left, fretboard bottom/right, analyzer collapsible.
- * Panes are empty placeholders until D4–D8 land.
  */
 function App() {
   const [analyzerOpen, setAnalyzerOpen] = useState(true)
+  const keySpelling = useTheoryStore((s) => s.keySpelling)
+  const mode = useTheoryStore((s) => s.mode)
 
   return (
     <div className="app-shell">
       <header className="app-header">
         <h1 className="app-title">Music Theory</h1>
         <p className="app-subtitle">Circle of Fifths · Fretboard · Analyzer</p>
+        <p className="app-key-badge" aria-live="polite">
+          {keySpelling} {mode}
+        </p>
       </header>
 
       <div className="workspace">
@@ -20,8 +26,8 @@ function App() {
           <div className="panel-header">
             <h2>Circle of Fifths</h2>
           </div>
-          <div className="panel-body empty-pane">
-            <p className="empty-copy">Dual-ring CoF will render here (Pixi).</p>
+          <div className="panel-body cof-pane">
+            <CircleOfFifths />
           </div>
           <div className="panel-footer empty-pane roman-slot">
             <p className="empty-copy muted">Roman strip · minor form (coming soon)</p>
